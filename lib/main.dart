@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/onboarding/pages/introduction.dart';
+import 'package:pt_pick_up_platform/onboarding/start_page.dart';
 import 'package:pt_pick_up_platform/routes/routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // home: const AuthGate(),
-      home: IntroScreenDemo(),
+      home: Introduction(),
       routes: {
         // Routes.onBoarding: (context) => OnBoarding(),
         // Routes.authGate: (context) => AuthGate(),
