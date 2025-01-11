@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "303034471793",
+    "project_id": "pick-up-platform-prototype",
+    "storage_bucket": "pick-up-platform-prototype.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303034471793:android:ee84879114b149704f52d0",
+        "android_client_info": {
+          "package_name": "com.pick_up"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLxV1sMLN4pI4CQ7LPG17HSSRifnoh9SA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
