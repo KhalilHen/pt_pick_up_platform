@@ -10,38 +10,60 @@ class Introduction extends StatefulWidget {
 }
 
 class _IntroductionState extends State<Introduction> {
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return IntroductionScreen(
       pages: getPages(),
       showNextButton: false,
-      showDoneButton: true,
-      doneStyle: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepOrange),
-        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        textStyle: MaterialStateProperty.all<TextStyle>(
-          TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      showDoneButton: false,
+      globalBackgroundColor: Colors.white,
       animationDuration: 1000,
       curve: Curves.easeInOut,
-      done: const Text(
-        "Done",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.deepOrange,
+      dotsDecorator: DotsDecorator(
+        activeColor: Colors.deepOrange,
+        size: Size.square(8.0),
+        activeSize: Size(16.0, 8.0),
+        activeShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
         ),
       ),
-      onDone: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Homepage(),
-          ),
-        );
+      onChange: (index) {
+        setState(() {
+          currentIndex = index;
+        });
       },
+      globalFooter: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Visibility(
+          visible: currentIndex == (getPages().length - 1),
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all<Color>(Colors.deepOrange),
+              padding: WidgetStateProperty.all<EdgeInsets>(
+                const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16.0),
+              ),
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Homepage(),
+                ),
+              );
+            },
+            child: const Text(
+              "Get Started",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
