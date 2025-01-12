@@ -12,7 +12,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Introduction'),
+        title: Text(''),
       ),
       body: Center(
         child: LineIcon(LineIcons.rocket, size: 150.0, color: Colors.deepOrange),

@@ -46,11 +46,9 @@ class _IntroductionState extends State<Introduction> {
               ),
             ),
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.pushReplacementNamed(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => Homepage(),
-                ),
+                '/home',
               );
             },
             child: const Text(
