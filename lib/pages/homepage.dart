@@ -61,6 +61,63 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
 
+
+                  Padding(padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  
+                  child: Column(
+
+
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    children: [
+
+                      const Text(
+                        'Categories',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 12,),
+
+                    SizedBox(
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 10, 
+                        itemBuilder: (context, index) {
+                                    return Container(
+
+                                      width: 90,
+                                      margin: const EdgeInsets.only(right: 12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.deepOrange.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(12),
+                                        
+                                      ),
+                                      child: Column(
+
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.fastfood, color: Colors.deepOrange, size: 28,),
+                                          SizedBox(height: 8,),
+                                          Text('category-title',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                      
+                        },
+                      ),
+                    ),
+                    ],
+                  ),
+                   )
+
           
 
              
