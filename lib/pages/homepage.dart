@@ -6,6 +6,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
         final screenSize = MediaQuery.of(context).size;
+
+final screenWidth = screenSize.width;
+
+        final itemWidth = (screenSize.width / 2) - 24; 
+        final double titleFontSize = screenWidth < 350 ? 14 : 16; 
+final double subtitleFontSize = screenWidth < 350 ? 12 : 14;
+final itemHeight = itemWidth * 1.4;
     return Scaffold(
       
       backgroundColor: Colors.white,
@@ -88,7 +95,7 @@ class HomePage extends StatelessWidget {
                                       width: 90,
                                       margin: const EdgeInsets.only(right: 12),
                                       decoration: BoxDecoration(
-                                        color: Colors.deepOrange.withOpacity(0.1),
+                                        color: Colors.deepOrange.withAlpha(25),
                                         borderRadius: BorderRadius.circular(12),
                                         
                                       ),
@@ -109,6 +116,105 @@ class HomePage extends StatelessWidget {
                       
                         },
                       ),
+                    ),
+                    Padding(padding: const EdgeInsets.symmetric(vertical: 16),
+                    
+                    child: Column(
+crossAxisAlignment: CrossAxisAlignment.start,
+children: [
+
+
+  Text('Popular',
+  
+  
+  style: Theme.of(context).textTheme.headlineLarge,
+  ),
+  const SizedBox(height: 12,),
+
+SizedBox(
+  height: itemHeight, // Limit the height to fit one row
+  child: ListView.builder(
+    scrollDirection: Axis.horizontal, // Horizontal scroll
+    itemCount: 10,
+    itemBuilder: (context, index) {
+      return Container(
+        width: itemWidth, // Set the width for each item
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.deepOrange.withAlpha(25), 
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withAlpha(25), 
+              spreadRadius: 1,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
+                ),
+                child: const Center(
+                  child: Icon(Icons.image, size: 40, color: Colors.grey),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Popular Item ${index + 1}',
+                      style: TextStyle(
+                        fontSize: titleFontSize,
+                        fontWeight: FontWeight.bold,
+
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      'Labels/Tags',
+     style: TextStyle(
+                        fontSize: subtitleFontSize, // Dynamic font size for subtitle
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    Row(
+                      children: const [
+                        Icon(Icons.star, color: Colors.amber, size: 14),
+                        Text(
+                          ' 4.5 · 20min',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  ),
+)
+  
+],
+                    ),
                     ),
 
                     Padding(padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -156,7 +262,7 @@ class HomePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withAlpha(25),
             spreadRadius: 1,
             blurRadius: 10,
           ),
