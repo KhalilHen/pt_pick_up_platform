@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:line_icons/line_icons.dart';
 
 PageViewModel startPage() {
   return PageViewModel(

@@ -38,11 +38,11 @@ class MyApp extends StatelessWidget {
 
       // home: const AuthGate(),
       // home: Introduction(),
-      home: Homepage(), //Easier for making the homepage
+      home: Introduction(), //Easier for making the homepage
       routes: {
         Routes.onBoarding: (context) => Introduction(),
         // Routes.authGate: (context) => AuthGate(),
-        Routes.home: (context) => Homepage(),
+        Routes.home: (context) => HomePage(),
         // Routes.signUp: (context) => SignUp(),
         // Routes.login: (context) => Login(),
       },
