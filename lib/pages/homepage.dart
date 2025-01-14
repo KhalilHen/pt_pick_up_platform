@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/controllers/category_controller.dart';
 import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
-
+import '../models/category.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+ 
+ 
+ final categoryController = CategoryController();
+ 
         final screenSize = MediaQuery.of(context).size;
-
+ 
 final screenWidth = screenSize.width;
 
         final itemWidth = (screenSize.width / 2) - 24; 
@@ -36,6 +41,12 @@ final itemHeight = itemWidth * 1.4;
             icon: const Icon(Icons.shopping_cart_outlined),
             onPressed: () {},
           ),
+
+          IconButton(onPressed: () {
+
+
+            categoryController.fetchCategories();
+          }, icon: const Icon(Icons.refresh),)
         ],
       ),
       body: SafeArea(
@@ -86,36 +97,67 @@ final itemHeight = itemWidth * 1.4;
 
                     SizedBox(
                       height: 100,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        
-                        itemCount: 10, 
-                        itemBuilder: (context, index) {
-                                    return Container(
+                      child: FutureBuilder<List>(
+                        // stream: null,
+                        future:  categoryController.fetchCategories(),
+                        builder: (context, snapshot) {
+                          
+                          
+                          if(snapshot.connectionState == ConnectionState.waiting) { 
 
-                                      width: 90,
-                                      margin: const EdgeInsets.only(right: 12),
-                                      decoration: BoxDecoration(
-                                        color: Colors.deepOrange.withAlpha(25),
-                                        borderRadius: BorderRadius.circular(12),
-                                        
-                                      ),
-                                      child: Column(
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                          if(snapshot.hasError)
+                          {
 
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.fastfood, color: Colors.deepOrange, size: 28,),
-                                          SizedBox(height: 8,),
-                                          Text('category-title',
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,),
-                                          )
-                                        ],
-                                      ),
-                                    );
-                      
-                        },
+
+                            return Text("There wen't something wrong: ${snapshot.error}");
+
+
+
+
+                          }
+                          if(!snapshot.hasData || snapshot.data!.isEmpty) { 
+
+return const Text('No data found');
+                          }
+ List categories = snapshot.data!;                         
+                                                    return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            
+                            itemCount: categories.length, 
+                            itemBuilder: (context, index) {
+                              final category = categories[index];
+                                        return Container(
+                          
+                                          width: 90,
+                                          margin: const EdgeInsets.only(right: 12),
+                                          decoration: BoxDecoration(
+                                            color: Colors.deepOrange.withAlpha(25),
+                                            borderRadius: BorderRadius.circular(12),
+                                            
+                                          ),
+                                          child: Column(
+                          
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.fastfood, color: Colors.deepOrange, size: 28,),
+                                              SizedBox(height: 8,),
+                                              Text(
+                                                
+                                              category.name ?? 'Category name', 
+                                                
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                          
+                            },
+                          );
+                        }
                       ),
                     ),
                     Padding(padding: const EdgeInsets.symmetric(vertical: 16),
