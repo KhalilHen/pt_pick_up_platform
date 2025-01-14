@@ -20,18 +20,33 @@ class Category {
   }
 
   IconData get icon {
-    return _getIconData(iconName);
+    return getIconData(iconName);
   }
 
-  IconData _getIconData(String iconName) {
-    return IconData(
-      iconName.hashCode,
-      fontFamily: 'MaterialIcons',
+  IconData getIconData(String iconName) {
+    switch (iconName) {
+      case 'fastfood':
+        return Icons.fastfood;
+      case 'local_pizza':
+        return Icons.local_pizza;
+      case 'restaurant':
+        return Icons.restaurant;
+
+        case 'vegan':
+        return Icons.coffee;
+      // Add more cases as needed
+      default:
+        return Icons.help_outline; // Default icon if no match is found
+    }
+  }
+
+
+  factory Category.fromMap(Map<String, dynamic> map) {
+    return Category(
+      id: map['id'],
+      name: map['name'],
+      iconName: map['icon_name'],
     );
-  }
-
-  static List<Category> fromJsonList(List<dynamic> jsonList) {
-    return jsonList.map((json) => Category.fromJson(json)).toList();
   }
 
 

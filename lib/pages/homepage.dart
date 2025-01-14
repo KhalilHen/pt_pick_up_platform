@@ -128,6 +128,7 @@ return const Text('No data found');
                             itemCount: categories.length, 
                             itemBuilder: (context, index) {
                               final category = categories[index];
+                              // print(category.name);
                                         return Container(
                           
                                           width: 90,
@@ -141,11 +142,12 @@ return const Text('No data found');
                           
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Icon(Icons.fastfood, color: Colors.deepOrange, size: 28,),
+                                              Icon(category.icon, color: Colors.deepOrange, size: 28),
+                                              // Text(category.iconName),
                                               SizedBox(height: 8,),
                                               Text(
                                                 
-                                              category.name ?? 'Category name', 
+                                         category.name ??   'Category name', 
                                                 
                                               style: const TextStyle(
                                                 fontSize: 12,

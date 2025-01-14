@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/models/category.dart';
 
 import '../main.dart';
 
@@ -7,7 +8,7 @@ class CategoryController {
 
 
 
-        Future<List> fetchCategories() async {
+        Future<List<Category>> fetchCategories() async {
       
               final response = await supabase.from('category').select();
 
@@ -19,7 +20,9 @@ class CategoryController {
               }
               else {
                   print(response);
-      return response;
+
+                   final data = response;
+    return data.map((e) => Category.fromMap(e as Map<String, dynamic>)).toList();
 
                   
               }
