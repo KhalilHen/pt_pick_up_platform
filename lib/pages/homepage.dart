@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -53,7 +54,7 @@ final itemHeight = itemWidth * 1.4;
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'Search for items...',
+                        hintText: 'Search for restaurants',
                         prefixIcon: const Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -255,92 +256,101 @@ SizedBox(
                             itemBuilder: (context, index) {
 
 
-                              return Container(
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantDetailPage()));
+                                },
+                                child: Hero(
 
- decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withAlpha(25),
-            spreadRadius: 1,
-            blurRadius: 10,
-          ),
-        ],
-      ),  
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-
-          Expanded(
-
-              flex: 3,
-              child: Container(  
-
-
-                decoration: BoxDecoration(
-                  color: Colors.grey[300]
-                ,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-
-
-                ),
-
-                child: Center(
-
-
-                  child:                  Icon(Icons.image,  size: 40, color: Colors.grey,),
-
-                ),
-
-              ),
-
-
-          ),
-
-          Expanded(
-            
-            flex: 2,
-            child: Padding(padding: const EdgeInsets.all(8.0),
-            
-            child: Column(
-crossAxisAlignment: CrossAxisAlignment.start,
-mainAxisAlignment: MainAxisAlignment.spaceBetween,
-children: [
-   Text('Restaurant Name',
-  
-  style: Theme.of(context).textTheme.headlineMedium,
- maxLines: 1,
- overflow: TextOverflow.ellipsis,
-  ),
-  
-
-  Text('labels/tags',
-  style: Theme.of(context).textTheme.bodyMedium,
-  ),
-  Row(
-
-children: [
-
-  Icon(Icons.star, color: Colors.amber, size: 14,
-  
-  ),
-  Text(                        ' 4.5 · 20min',
-
-  style: TextStyle(fontSize: 12),
-  )
-],
-
-  ),
-],
-            ),
-            ),
-
-
-            )
-        ],
-      ) ,
+                                  tag: 'restaurant',
+                                  child: Container(
+                                  
+                                   decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(12),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.withAlpha(25),
+                                              spreadRadius: 1,
+                                              blurRadius: 10,
+                                            ),
+                                          ],
+                                        ),  
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                  
+                                          children: [
+                                  
+                                            Expanded(
+                                  
+                                                flex: 3,
+                                                child: Container(  
+                                  
+                                  
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey[300]
+                                                  ,
+                                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                                  
+                                  
+                                                  ),
+                                  
+                                                  child: Center(
+                                  
+                                  
+                                                    child:                  Icon(Icons.image,  size: 40, color: Colors.grey,),
+                                  
+                                                  ),
+                                  
+                                                ),
+                                  
+                                  
+                                            ),
+                                  
+                                            Expanded(
+                                              
+                                              flex: 2,
+                                              child: Padding(padding: const EdgeInsets.all(8.0),
+                                              
+                                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                     Text('Restaurant Name',
+                                    
+                                    style: Theme.of(context).textTheme.headlineMedium,
+                                   maxLines: 1,
+                                   overflow: TextOverflow.ellipsis,
+                                    ),
+                                    
+                                  
+                                    Text('labels/tags',
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    ),
+                                    Row(
+                                  
+                                  children: [
+                                  
+                                    Icon(Icons.star, color: Colors.amber, size: 14,
+                                    
+                                    ),
+                                    Text(                        ' 4.5 · 20min',
+                                  
+                                    style: TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                  
+                                    ),
+                                  ],
+                                              ),
+                                              ),
+                                  
+                                  
+                                              )
+                                          ],
+                                        ) ,
+                                  ),
+                                ),
                               );
                             }
                             
