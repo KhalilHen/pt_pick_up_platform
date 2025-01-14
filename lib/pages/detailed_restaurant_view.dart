@@ -160,11 +160,7 @@ const SizedBox(height: 16,),
                             width: 80,
                             height: 80,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: NetworkImage('https://www.bartsboekje.com/wp-content/uploads/2020/06/riccardo-bergamini-O2yNzXdqOu0-unsplash-scaled.jpg'),
-                                fit: BoxFit.cover,
-                              ),
+                              
                             ),
                           )
                         ],
