@@ -13,6 +13,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+
+  
   //To force user to use only portrait mode
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -32,7 +35,53 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-        primaryColor: Colors.deepOrange,
+    primarySwatch: Colors.deepOrange,
+    appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.white),
+
+
+
+
+
+
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 24.0,
+        fontWeight: FontWeight.bold,
+
+      ),
+    ),
+
+
+
+
+    // Primary text on light background
+    textTheme: const TextTheme(
+
+
+    headlineLarge: TextStyle( 
+      color: Colors.black, 
+      fontSize: 20, 
+      fontWeight: FontWeight.bold, 
+    ),
+
+
+
+    headlineMedium: TextStyle(
+      color: Colors.black87,
+      fontSize: 16,
+      fontWeight: FontWeight.bold ,
+    ),
+      //Secondary text/body  on light background
+  bodyMedium: TextStyle(
+    color: Colors.black87,
+    fontSize: 14,
+    fontWeight: FontWeight.bold
+  )
+    ),
+  
+ 
+
       ),
       debugShowCheckedModeBanner: false,
 

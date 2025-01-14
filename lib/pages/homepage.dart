@@ -5,42 +5,40 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final screenSize = MediaQuery.of(context).size;
     return Scaffold(
+      
       backgroundColor: Colors.white,
+
+
+      appBar: AppBar(
+        backgroundColor: Colors.deepOrange,
+        title: Text('Pick-up',
+        style: Theme.of(context).appBarTheme.titleTextStyle,
+        ),
+        
+        
+        
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person_outline),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.shopping_cart_outlined),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              color: Colors.deepOrange,
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Pick-up',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.person_outline, color: Colors.white),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+       
             
             Expanded(
+
+
+                  //Category listbuilder
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
@@ -71,12 +69,9 @@ class HomePage extends StatelessWidget {
 
                     children: [
 
-                      const Text(
+                       Text(
                         'Categories',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
 
                       const SizedBox(height: 12,),
@@ -85,6 +80,7 @@ class HomePage extends StatelessWidget {
                       height: 100,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
+                        
                         itemCount: 10, 
                         itemBuilder: (context, index) {
                                     return Container(
@@ -114,6 +110,142 @@ class HomePage extends StatelessWidget {
                         },
                       ),
                     ),
+
+                    Padding(padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    
+                    
+                    child: Column(
+
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                             Text('Restaurants',
+
+                                    style: Theme.of(context).textTheme.headlineLarge,
+                            
+                            ),
+                            const SizedBox(height: 12,),
+
+                            GridView.builder(
+                              
+                              
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: screenSize.width < 340 ? 1 : 2,
+                            childAspectRatio: (screenSize.width / 2 - 24) / ((screenSize.width / 2 - 24) * 1.2),
+
+                            // childAspectRatio: 0.7,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+
+                            
+                            
+                            ),
+
+
+                            itemCount: 10,
+                            
+                            
+                            itemBuilder: (context, index) {
+
+
+                              return Container(
+
+ decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+          ),
+        ],
+      ),  
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+
+          Expanded(
+
+              flex: 3,
+              child: Container(  
+
+
+                decoration: BoxDecoration(
+                  color: Colors.grey[300]
+                ,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+
+
+                ),
+
+                child: Center(
+
+
+                  child:                  Icon(Icons.image,  size: 40, color: Colors.grey,),
+
+                ),
+
+              ),
+
+
+          ),
+
+          Expanded(
+            
+            flex: 2,
+            child: Padding(padding: const EdgeInsets.all(8.0),
+            
+            child: Column(
+crossAxisAlignment: CrossAxisAlignment.start,
+mainAxisAlignment: MainAxisAlignment.spaceBetween,
+children: [
+   Text('Restaurant Name',
+  
+  style: Theme.of(context).textTheme.headlineMedium,
+ maxLines: 1,
+ overflow: TextOverflow.ellipsis,
+  ),
+  
+
+  Text('labels/tags',
+  style: Theme.of(context).textTheme.bodyMedium,
+  ),
+  Row(
+
+children: [
+
+  Icon(Icons.star, color: Colors.amber, size: 14,
+  
+  ),
+  Text(                        ' 4.5 · 20min',
+
+  style: TextStyle(fontSize: 12),
+  )
+],
+
+  ),
+],
+            ),
+            ),
+
+
+            )
+        ],
+      ) ,
+                              );
+                            }
+                            
+                            
+                            
+                            )
+
+                          ],
+
+                    ),
+                    ),
                     ],
                   ),
                    )
@@ -123,6 +255,8 @@ class HomePage extends StatelessWidget {
              
                 ],
               ),
+
+              
             ),
           ],
         ),
