@@ -1,13 +1,34 @@
-// Restaurant Card Widget (Place in your main list/grid)
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/custom/custom_menu.dart';
+// import 'package:pt_pick_up_platform/widgets/custom_widgets.dart'; // Add this line to import CustomWidgets
 
 class RestaurantDetailPage extends StatelessWidget {
-  const RestaurantDetailPage({
+   RestaurantDetailPage({
     Key? key,
   }) : super(key: key);
 
+
+
+//Mock data
+  final List<Map<String, dynamic>> menuSections = [
+    {
+      'title': 'Section 1',
+      'items': [
+        {'name': 'Edamame', 'description': 'Steamed soybeans', 'price': 5.99},
+        {'name': 'Miso Soup', 'description': 'Soybean paste soup', 'price': 3.99},
+        {'name': 'Gyoza', 'description': 'Pan-fried dumplings', 'price': 4.99},
+        {'name': 'California Roll', 'description': 'Crab, avocado, cucumber', 'price': 6.99},
+        {'name': 'Spicy Tuna Roll', 'description': 'Tuna, spicy mayo, cucumber', 'price': 7.99},
+        {'name': 'Dragon Roll', 'description': 'Shrimp tempura, eel, avocado', 'price': 9.99},
+      ],
+    },
+   
+  ];
+
   @override
   Widget build(BuildContext context) {
+
+    final  customWidgets = customMenuWidgets();
       return  Scaffold(
 
 
@@ -97,66 +118,38 @@ SliverAppBar(
     child: Row(
 
       children: [
-
         Container(
-//Map here late all category
           margin: const EdgeInsets.only(right: 8),
-
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),          ),
-
-            child: Text('Category'  + 'category2'),
-
-
-
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text('Category 1'),
         ),
-
+        Container(
+          margin: const EdgeInsets.only(right: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text('Category 2'),
+        ),
+      ],
+    ),
+ ),                  
         const SizedBox(height: 24,),
 
 
         Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
 
-                children: [
-                  Text(
-                    'section',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-
-                  const SizedBox(height: 16,),
-                  //TODO Change ListView later when retrieving from DB
-                  // ListView(
-
-                  //   children: [
-                  //     Padding(padding: 
-                      
-                  //     const EdgeInsets.symmetric(vertical: 8),
-                  //     child: Row(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-
-                  //       children: [
-                  //         Container(
-
-                  //           width: 80,
-                  //           height: 80,
-                  //           decoration: BoxDecoration(
-                              
-                  //           ),
-                  //         )
-                  //       ],
-                  //     ),
-                  //     )
-                  //   ],
-                  // )
-                ],
+                children: menuSections.map((section) {
+                  return customWidgets.buildMenuSection(context, section);
+                }).toList(),
         )
       ],
-    ),
- )                  
-                
-        ],
     ),
     ),
 
