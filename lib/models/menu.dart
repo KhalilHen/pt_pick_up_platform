@@ -6,7 +6,7 @@ class MenuItem {
   final String name;
   final String description;
   final double price;
-  final String imageUrl;
+  final String? imageUrl;
 
 
   MenuItem({
@@ -14,6 +14,19 @@ class MenuItem {
     required this.name,
     required this.description,
     required this.price,
-    required this.imageUrl,
+     this.imageUrl,
   });
+  
+
+    factory MenuItem.fromMap(Map<String, dynamic> data) {
+    return MenuItem(
+        id: data['id'],
+        name: data['name'], 
+        description: data['description'],
+        price: data['price'],
+        imageUrl: data['image_url'],
+
+     
+        );
+  }
 }
