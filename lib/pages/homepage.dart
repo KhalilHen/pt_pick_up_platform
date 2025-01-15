@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/controllers/category_controller.dart';
+import 'package:pt_pick_up_platform/controllers/restaurant_controller.dart';
+import 'package:pt_pick_up_platform/models/restaurant.dart';
 import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
 import '../models/category.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
@@ -12,6 +14,7 @@ class HomePage extends StatelessWidget {
  
  final categoryController = CategoryController();
 //  final menuController =  MenuController();
+final restaurantController = RestaurantController();
         final screenSize = MediaQuery.of(context).size;
  
 final screenWidth = screenSize.width;
@@ -48,6 +51,7 @@ final itemHeight = itemWidth * 1.4;
 
             // categoryController.fetchCategories();
             // menuController.fetchMenuItems();
+            // restaurantController.fetchRestaurants();
           }, icon: const Icon(Icons.refresh),)
         ],
       ),
@@ -264,165 +268,137 @@ SizedBox(
                     ),
                     ),
 
-                    Padding(padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    
-                    
-                    child: Column(
+                  FutureBuilder<List<Restaurant>>(
+  future: restaurantController.fetchRestaurants(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (snapshot.hasError) {
+      return const Text('There was an error');
+    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      return const Text('No data found');
+    }
 
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                             Text('Restaurants',
-
-                                    style: Theme.of(context).textTheme.headlineLarge,
-                            
-                            ),
-                            const SizedBox(height: 12,),
-
-                            GridView.builder(
-                              
-                              
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: screenSize.width < 340 ? 1 : 2,
-                            childAspectRatio: (screenSize.width / 2 - 24) / ((screenSize.width / 2 - 24) * 1.2),
-
-                            // childAspectRatio: 0.7,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-
-                            
-                            
-                            ),
-
-
-                            itemCount: 10,
-                            
-                            
-                            itemBuilder: (context, index) {
-
-
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantDetailPage()));
-                                },
-                                child: Hero(
-
-                                  tag: 'restaurant',
-                                  child: Container(
-                                  
-                                   decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey.withAlpha(25),
-                                              spreadRadius: 1,
-                                              blurRadius: 10,
-                                            ),
-                                          ],
-                                        ),  
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                  
-                                          children: [
-                                  
-                                            Expanded(
-                                  
-                                                flex: 3,
-                                                child: Container(  
-                                  
-                                  
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey[300]
-                                                  ,
-                                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                                  
-                                  
-                                                  ),
-                                  
-                                                  child: Center(
-                                  
-                                  
-                                                    child:                  Icon(Icons.image,  size: 40, color: Colors.grey,),
-                                  
-                                                  ),
-                                  
-                                                ),
-                                  
-                                  
-                                            ),
-                                  
-                                            Expanded(
-                                              
-                                              flex: 2,
-                                              child: Padding(padding: const EdgeInsets.all(8.0),
-                                              
-                                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                     Text('Restaurant Name',
-                                    
-                                    style: Theme.of(context).textTheme.headlineMedium,
-                                   maxLines: 1,
-                                   overflow: TextOverflow.ellipsis,
-                                    ),
-                                    
-                                  
-                                    Text('labels/tags',
-                                    style: Theme.of(context).textTheme.bodyMedium,
-                                    ),
-                                    Row(
-                                  
-                                  children: [
-                                  
-                                    Icon(Icons.star, color: Colors.amber, size: 14,
-                                    
-                                    ),
-                                    Text(                        ' 4.5 · 20min',
-                                  
-                                    style: TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                  
-                                    ),
-                                  ],
-                                              ),
-                                              ),
-                                  
-                                  
-                                              )
-                                          ],
-                                        ) ,
-                                  ),
-                                ),
-                              );
-                            }
-                            
-                            
-                            
-                            )
-
-                          ],
-
-                    ),
-                    ),
-                    ],
+    final List<Restaurant> restaurant = snapshot.data!;
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: screenSize.width < 340 ? 1 : 2,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: restaurant.length,
+      itemBuilder: (context, index) {
+        final restaurantItem = restaurant[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RestaurantDetailPage(),
+              ),
+            );
+          },
+          child: Hero(
+            tag: 'restaurant-${restaurantItem.id}',
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withAlpha(25),
+                    spreadRadius: 1,
+                    blurRadius: 10,
                   ),
-                   )
-
-          
-
-             
                 ],
               ),
-
-              
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius:
+                            const BorderRadius.vertical(top: Radius.circular(12)),
+                      ),
+                      child: Center(
+                        child: restaurantItem.imgUrl != null
+                            ? Image.network(
+                                restaurantItem.imgUrl!,
+                                fit: BoxFit.cover,
+                              )
+                            : const
+                        
+                        
+                         Icon(
+                          Icons.image,
+                          size: 40,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            restaurantItem.name ?? 'Restaurant Name',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'Labels/tags',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: 14,
+                              ),
+                              Text(
+                                '${restaurantItem.rating.toStringAsFixed(1)} · ${restaurantItem.reviewCount} reviews',
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
+    );
+  },
+),
+                    ],
+                  ),
+                  ),
+                    ],
+                  ),
+                  ),
+                ],
+              ),
+            ),
+        
+        
+      
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.deepOrange,
         unselectedItemColor: Colors.grey,

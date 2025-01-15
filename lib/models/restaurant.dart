@@ -5,10 +5,10 @@ class Restaurant  {
   final int  id;
   final String name;
   final String description;
-  final String address;
+  final String? address;
   final double rating;
   final int reviewCount;
-  // final String  imgUrl;
+  final String?  imgUrl;
   
     Restaurant({
       required this.id,
@@ -20,6 +20,8 @@ class Restaurant  {
       required this.reviewCount,
       // required this.categories,
       // required this.menuSections,
+       required  this.imgUrl
+
     });
 
 
@@ -32,6 +34,7 @@ class Restaurant  {
         name: data['name'],
         description: data['description'],
         address: data['address'],
+        imgUrl: data['img_url'],
         // phone_number: data['phone_number'], //Maby later
         rating: data['rating'],
         reviewCount: data['review_count']
