@@ -297,7 +297,7 @@ SizedBox(
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RestaurantDetailPage(),
+                builder: (context) => RestaurantDetailPage(restaurant: restaurantItem),
               ),
             );
           },

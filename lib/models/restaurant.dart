@@ -9,10 +9,11 @@ class Restaurant  {
   final double rating;
   final int reviewCount;
   final String?  imgUrl;
+  // final List<MenuSection>? menuSections;
   
     Restaurant({
       required this.id,
-      required this.name,
+      required this.name, 
       required this.description,
       required this.address,
       // required this.phone_number,
@@ -20,7 +21,8 @@ class Restaurant  {
       required this.reviewCount,
       // required this.categories,
       // required this.menuSections,
-       required  this.imgUrl
+       required  this.imgUrl,
+      //  required this.menuSections
 
     });
 
@@ -34,12 +36,17 @@ class Restaurant  {
         name: data['name'],
         description: data['description'],
         address: data['address'],
-        imgUrl: data['img_url'],
+        imgUrl: data['image_url'],
         // phone_number: data['phone_number'], //Maby later
         rating: data['rating'],
-        reviewCount: data['review_count']
+        reviewCount: data['review_count'],
+          //  menuSections: (data['menu_sections'] as List)
+          // .map((e) => MenuSection.fromMap(e as Map<String, dynamic>))
+          // .toList(),
       );
     }
     
   }
+  
+
   

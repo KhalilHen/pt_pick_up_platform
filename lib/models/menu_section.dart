@@ -6,10 +6,20 @@ class MenuSection {
 
     final int id;
    final  int restaurantId;  
+   final String name;
 
   MenuSection({ 
 
 required this.id,
 required this.restaurantId,
+required this.name,
   });
+
+  factory MenuSection.fromMap(Map<String, dynamic> data) {
+    return MenuSection(
+      id: data['id'],
+      restaurantId: data['restaurant_id'],
+      name: data['name'],
+    );
+  }
 }
