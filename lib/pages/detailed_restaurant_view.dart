@@ -42,44 +42,32 @@ SliverAppBar(
     child: Padding(padding: const EdgeInsets.all(16),
     
     
-    child: Column(
-
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-
-          Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-            children: [
-              Row(
-
+        child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-       const Icon(Icons.star, color: Colors.amber, size: 20,),
-
-              Text(
-              'Rating: 4.5',
-              style: Theme.of(context).textTheme.headlineMedium,
-
-              ),
-   
-                ],
-              ),
-
-       
-   
-   Text('Reviews',
-   
-   
-                //  style: Theme.of(context).textTheme.headlineMedium,s
-                style: TextStyle(
-                  color: Colors.grey[600]
-                ),
-  )
-            ],
-          ),
-
-               Container(
+                  // Restaurant Info
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 20),
+                          Text(
+                            ' 3.5 ',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            ' 120 reviews)',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 6,
@@ -88,25 +76,19 @@ SliverAppBar(
                           color: Colors.deepOrange.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.timer,
-                              color: Colors.deepOrange,
-                            ),
-                            Padding(padding: const EdgeInsets.only(right: 8)),
-                            Text(
-                              '30 min',
-                              style: const TextStyle(
-                                color: Colors.deepOrange,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          '30 min',
+                          style: const TextStyle(
+                            color: Colors.deepOrange,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-const SizedBox(height: 16,),
-
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  
+//TODO Improve later the category
  SingleChildScrollView(
 
     scrollDirection: Axis.horizontal,
@@ -125,7 +107,7 @@ const SizedBox(height: 16,),
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(20),          ),
 
-            child: Text('Category'),
+            child: Text('Category'  + 'category2'),
 
 
 
@@ -145,29 +127,29 @@ const SizedBox(height: 16,),
 
                   const SizedBox(height: 16,),
                   //TODO Change ListView later when retrieving from DB
-                  ListView(
+                  // ListView(
 
-                    children: [
-                      Padding(padding: 
+                  //   children: [
+                  //     Padding(padding: 
                       
-                      const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  //     const EdgeInsets.symmetric(vertical: 8),
+                  //     child: Row(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
 
-                        children: [
-                          Container(
+                  //       children: [
+                  //         Container(
 
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
+                  //           width: 80,
+                  //           height: 80,
+                  //           decoration: BoxDecoration(
                               
-                            ),
-                          )
-                        ],
-                      ),
-                      )
-                    ],
-                  )
+                  //           ),
+                  //         )
+                  //       ],
+                  //     ),
+                  //     )
+                  //   ],
+                  // )
                 ],
         )
       ],
