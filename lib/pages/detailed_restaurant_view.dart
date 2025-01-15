@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/controllers/category_controller.dart';
 import 'package:pt_pick_up_platform/custom/custom_menu.dart';
 // import 'package:pt_pick_up_platform/widgets/custom_widgets.dart'; // Add this line to import CustomWidgets
+import 'package:pt_pick_up_platform/models/category.dart';
+import 'package:pt_pick_up_platform/models/restaurant.dart';
+import 'package:pt_pick_up_platform/models/menu.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
    RestaurantDetailPage({
     Key? key,
   }) : super(key: key);
 
-
-
+ final  menuController = MenuController();
+final categoryController = CategoryController();
 //Mock data
   final List<Map<String, dynamic>> menuSections = [
     {
@@ -129,15 +133,7 @@ SliverAppBar(
           ),
           child: Text('Category 1'),
         ),
-        Container(
-          margin: const EdgeInsets.only(right: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text('Category 2'),
-        ),
+      
       ],
     ),
  ),                  
