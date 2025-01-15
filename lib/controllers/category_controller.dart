@@ -10,6 +10,9 @@ class CategoryController {
 
         Future<List<Category>> fetchCategories() async {
       
+
+                try {
+
               final response = await supabase.from('category').select();
 
               if(response == null || response.isEmpty ) {
@@ -26,6 +29,13 @@ class CategoryController {
 
                   
               }
+
+                }
+                catch(e) {
+                  print(e);
+                  return [];
+                }
+
 
 
         }
