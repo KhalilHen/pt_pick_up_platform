@@ -7,6 +7,7 @@ class MenuItem {
   final String description;
   final int price;
   final String? imageUrl;
+  final int sectionId;
 
 
   MenuItem({
@@ -15,6 +16,7 @@ class MenuItem {
     required this.description,
     required this.price,
      this.imageUrl,
+    required this.sectionId,
   });
   
 
@@ -25,6 +27,7 @@ class MenuItem {
         description: data['description'],
         price: data['price'],
         imageUrl: data['image_url'],
+        sectionId: data['section_id'],
 
      
         );

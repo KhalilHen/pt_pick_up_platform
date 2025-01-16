@@ -2,43 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/models/menu.dart';
 import '../main.dart';
 import '../controllers/menu_controller.dart';
-
+import 'package:pt_pick_up_platform/models/menu_section.dart';
 class customMenuWidgets {
   final menuController = MenuController1();
+    
 
   Widget buildMenuSection(BuildContext context, Map<String, dynamic> section) {
     String title = section['title'];
-    int sectionId = section['id'];
+    int sectionId = section['id']; 
 
-    return FutureBuilder(
+    return FutureBuilder<List<MenuItem>>(
       future: menuController.fetchMenuItems(sectionId: sectionId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error loading menu items'));
-        } else {
-          List<MenuItem> items = snapshot.data ?? [];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 16),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: items.length,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) {
-                  return buildMenuItem(context, items[index]);
-                },
-              ),
-            ],
-          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No menu items available!'));
         }
+
+        List<MenuItem> items = snapshot.data!;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: items.length,
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) {
+                return buildMenuItem(context, items[index]);
+              },
+            ),
+          ],
+        );
       },
     );
   }
@@ -54,12 +57,12 @@ class customMenuWidgets {
             height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: NetworkImage(item.imageUrl ??
-                '',
-                ),
-                fit: BoxFit.cover,
-              ),
+              // image: DecorationImage(
+              //   image: NetworkImage(item.imageUrl ??
+              //   '',
+              //   ),
+              //   fit: BoxFit.cover,
+              // ),
             ),
           ),
           const SizedBox(width: 12),

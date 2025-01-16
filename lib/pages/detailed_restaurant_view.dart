@@ -113,10 +113,10 @@ final MenuController1 menuController = MenuController1();
                   // ),
             
 
-            FutureBuilder<List<MenuSection>>(
+            FutureBuilder<List<MenuSection>>( 
               
 
-                future: menuController.fetchMenuSections(restaurantId: this.restaurant.id),
+                future: menuController.fetchMenuSections(restaurantId: restaurant.id),
 
 
             
@@ -129,7 +129,9 @@ final MenuController1 menuController = MenuController1();
               
               }
               else if(snapshot.hasError) {
+                print(snapshot.data);
 
+                      print(snapshot.error);
                 return   const Center(child: CircularProgressIndicator());
 
              
@@ -146,9 +148,11 @@ final MenuController1 menuController = MenuController1();
 
               crossAxisAlignment: CrossAxisAlignment.start,
               children: sections.map((section) {
-                return _customWidgets.buildMenuSection(context, {
+                    final sectionName = section.name.isEmpty ? 'Unnamed Section' : section.name;
+
+                return customWidgets.buildMenuSection(context, {
                   'id': section.id,
-                  'title': section.name,
+                  'title': sectionName,
                 });
               }).toList(
               ),
@@ -157,7 +161,7 @@ final MenuController1 menuController = MenuController1();
             }
             
             
-            )
+            ),
                 ],
               ),
             ),
