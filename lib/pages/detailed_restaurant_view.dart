@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
 import 'package:pt_pick_up_platform/custom/custom_menu.dart';
+import 'package:pt_pick_up_platform/models/menu_section.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
   final Restaurant restaurant;
-
-  const RestaurantDetailPage({
+   RestaurantDetailPage({
     Key? key,
     required this.restaurant,
   }) : super(key: key);
 
   @override
+
+  @override
   Widget build(BuildContext context) {
     final customWidgets = customMenuWidgets();
+    final customMenuWidgets _customWidgets = customMenuWidgets();
+    
+final MenuController1 menuController = MenuController1();
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -105,6 +111,53 @@ class RestaurantDetailPage extends StatelessWidget {
                   //     });
                   //   }).toList(),
                   // ),
+            
+
+            FutureBuilder<List<MenuSection>>(
+              
+
+                future: menuController.fetchMenuSections(restaurantId: this.restaurant.id),
+
+
+            
+            builder:  (context, snapshot)  {
+
+
+              if(snapshot.connectionState == ConnectionState.waiting) {
+
+          return Center(child: CircularProgressIndicator());
+              
+              }
+              else if(snapshot.hasError) {
+
+                return   const Center(child: CircularProgressIndicator());
+
+             
+             
+              }
+              else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+
+                return const Center(child: Text('No menu sections is avaibel!'));
+
+              }
+            
+            List<MenuSection> sections = snapshot.data!;
+            return Column(
+
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: sections.map((section) {
+                return _customWidgets.buildMenuSection(context, {
+                  'id': section.id,
+                  'title': section.name,
+                });
+              }).toList(
+              ),
+            );
+
+            }
+            
+            
+            )
                 ],
               ),
             ),

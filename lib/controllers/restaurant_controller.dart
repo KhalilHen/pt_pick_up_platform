@@ -20,17 +20,5 @@ class RestaurantController {
     }
   }
 
-  Future<Restaurant?> fetchRestaurantById(int id) async {
-    try {
-      final response = await supabase.from('restaurant').select().eq('id', id).single();
-      if (response == null) {
-        return null;
-      } else {
-        return Restaurant.fromMap(response as Map<String, dynamic>);
-      }
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
+
 }

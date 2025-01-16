@@ -7,6 +7,7 @@ class MenuSection {
     final int id;
    final  int restaurantId;  
    final String name;
+   
 
   MenuSection({ 
 

@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
  
  
  final categoryController = CategoryController();
-//  final menuController =  MenuController();
+ final menuController =  MenuController1();
 final restaurantController = RestaurantController();
         final screenSize = MediaQuery.of(context).size;
  
@@ -52,6 +52,7 @@ final itemHeight = itemWidth * 1.4;
             // categoryController.fetchCategories();
             // menuController.fetchMenuItems();
             // restaurantController.fetchRestaurants();
+           menuController. fetchMenuSections(restaurantId: 1);
           }, icon: const Icon(Icons.refresh),)
         ],
       ),
