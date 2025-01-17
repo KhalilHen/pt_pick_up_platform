@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/controllers/category_controller.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
 import 'package:pt_pick_up_platform/custom/custom_menu.dart';
+import 'package:pt_pick_up_platform/models/category.dart';
 import 'package:pt_pick_up_platform/models/menu_section.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
+
+import '../models/restaurant_category.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
   final Restaurant restaurant;
@@ -12,13 +16,11 @@ class RestaurantDetailPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-
-  @override
   Widget build(BuildContext context) {
     final customWidgets = customMenuWidgets();
-    final customMenuWidgets _customWidgets = customMenuWidgets();
-    
-final MenuController1 menuController = MenuController1();
+    final categoryController = CategoryController();
+    final menuController = MenuController1();
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -83,19 +85,58 @@ final MenuController1 menuController = MenuController1();
                       ),
                     ],
                   ),
+
+
+    Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+      child: 
+        Text(
+'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tincidunt sem congue, malesuada enim sit amet, ornare ipsum. Pellentesque enim elit, interdum eget facilisis nec, congue condimentum diam. In tristique in mauris a malesuada. Cras consectetur lorem at lacus venenatis, non tristique neque gravida. Aenean non viverra nisi. Nullam vitae dolor egestas, viverra nisi a, ultricies justo. Nulla non nisi ligula. In tristique auctor leo.'
+,
+          maxLines: 4,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+
+            color: Colors.grey[600],
+            fontSize: 16,
+          ),
+        ) 
+      ),
+    ),
+
                   const SizedBox(height: 16),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 8),
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text('Category 1'), 
+                        FutureBuilder<List<Category>>(
+                          future: categoryController.fetchRestaurantCategory(restaurantId: restaurant.id),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              print(snapshot.error);
+                              return Center(child: Text('Error loading categories'));
+                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                              return Center(child: Text('No categories available'));
+                            } else {
+                              final categories = snapshot.data!;
+                              return Row(
+                                children: categories.map((category) {
+                                  return Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(category.name),
+                                  );
+                                }).toList(),
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -123,11 +164,11 @@ final MenuController1 menuController = MenuController1();
             builder:  (context, snapshot)  {
 
 
-          //     if(snapshot.connectionState == ConnectionState.waiting) {
+              if(snapshot.connectionState == ConnectionState.waiting) {
 
-          // return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator());
               
-          //     }
+              }
                if(snapshot.hasError) {
                 print(snapshot.data);
 

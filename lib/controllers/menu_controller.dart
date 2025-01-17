@@ -26,7 +26,7 @@ class MenuController1 {
   }
 
   Future<List<MenuItem>> fetchMenuItems({required int sectionId}) async {
-    print('Fetching menu items for section ID: $sectionId');
+    // print('Fetching menu items for section ID: $sectionId');
 
     try {
       final response = await supabase
@@ -34,7 +34,7 @@ class MenuController1 {
           .select()
           .eq('section_id', sectionId);
 
-      print('Raw response from menu_items query: $response');
+      // print('Raw response from menu_items query: $response');
 
       if (response == null || response.isEmpty) {
         print('No menu items found for section $sectionId');
@@ -42,11 +42,11 @@ class MenuController1 {
       }
 
       final items = (response as List<dynamic>).map((data) {
-        print('Processing item data: $data');
+        // print('Processing item data: $data');
         return MenuItem.fromMap(data as Map<String, dynamic>);
       }).toList();
 
-      print('Successfully parsed ${items.length} menu items');
+      // print('Successfully parsed ${items.length} menu items');
       return items;
     } catch (e, stackTrace) {
       print('Error fetching menu items: $e');

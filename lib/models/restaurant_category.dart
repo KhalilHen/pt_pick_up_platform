@@ -13,5 +13,9 @@ class RestaurantCategory {
     required this.categoryId,
   });
 
+factory RestaurantCategory.fromJson(Map<String, dynamic> json) {
+
+  return RestaurantCategory(id: json['id'], restaurantId: json['restaurant_id'], categoryId: json['category_id']);
+}
   
 }
