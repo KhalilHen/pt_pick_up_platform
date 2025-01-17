@@ -115,7 +115,7 @@ final MenuController1 menuController = MenuController1();
 
             FutureBuilder<List<MenuSection>>( 
               
-
+                  // print('restaurant.id: ${restaurant.id}');
                 future: menuController.fetchMenuSections(restaurantId: restaurant.id),
 
 
@@ -123,12 +123,12 @@ final MenuController1 menuController = MenuController1();
             builder:  (context, snapshot)  {
 
 
-              if(snapshot.connectionState == ConnectionState.waiting) {
+          //     if(snapshot.connectionState == ConnectionState.waiting) {
 
-          return Center(child: CircularProgressIndicator());
+          // return Center(child: CircularProgressIndicator());
               
-              }
-              else if(snapshot.hasError) {
+          //     }
+               if(snapshot.hasError) {
                 print(snapshot.data);
 
                       print(snapshot.error);
@@ -143,20 +143,27 @@ final MenuController1 menuController = MenuController1();
 
               }
             
-            List<MenuSection> sections = snapshot.data!;
-            return Column(
+            List<MenuSection>?  sections = snapshot.data!;
 
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: sections.map((section) {
-                    final sectionName = section.name.isEmpty ? 'Unnamed Section' : section.name;
+            if(sections.isEmpty || sections == null) {
+              return const Center(child: Text('No menu sections is avaibel!'));
+            }
+           return Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: sections.map((section) {
+    // Debugging: Print each section's data
+    print('Section ID: ${section.id}, Section Name: ${section.name}');
 
-                return customWidgets.buildMenuSection(context, {
-                  'id': section.id,
-                  'title': sectionName,
-                });
-              }).toList(
-              ),
-            );
+    // Handle sections with missing or empty names
+    final sectionName = section.name.isEmpty ? 'Unnamed Section' : section.name;
+
+    // Call buildMenuSection with the actual model
+    return customWidgets.buildMenuSection(context, {
+      'id': section.id,
+      'title': section.name,
+    });
+  }).toList(),
+           );
 
             }
             

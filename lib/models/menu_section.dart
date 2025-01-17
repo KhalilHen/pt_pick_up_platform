@@ -18,9 +18,9 @@ required this.name,
 
   factory MenuSection.fromMap(Map<String, dynamic> data) {
     return MenuSection(
-      id: data['id'] as int,
-      restaurantId: data['restaurant_id'] as int,
-      name: data['name'] as String,
+      id: data['id']  ,
+      restaurantId: data['restaurant_id']  ,
+      name: data['title']  ,
     );
   }
 }

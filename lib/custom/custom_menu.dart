@@ -3,13 +3,14 @@ import 'package:pt_pick_up_platform/models/menu.dart';
 import '../main.dart';
 import '../controllers/menu_controller.dart';
 import 'package:pt_pick_up_platform/models/menu_section.dart';
+
 class customMenuWidgets {
   final menuController = MenuController1();
-    
 
   Widget buildMenuSection(BuildContext context, Map<String, dynamic> section) {
     String title = section['title'];
-    int sectionId = section['id']; 
+    int sectionId = section['id'];
+  print('Building menu section: title=$title, sectionId=$sectionId');
 
     return FutureBuilder<List<MenuItem>>(
       future: menuController.fetchMenuItems(sectionId: sectionId),
@@ -57,12 +58,12 @@ class customMenuWidgets {
             height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              // image: DecorationImage(
-              //   image: NetworkImage(item.imageUrl ??
-              //   '',
-              //   ),
-              //   fit: BoxFit.cover,
-              // ),
+              image: item.imageUrl != null
+                  ? DecorationImage(
+                      image: NetworkImage(item.imageUrl!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
           ),
           const SizedBox(width: 12),
@@ -76,7 +77,7 @@ class customMenuWidgets {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  item.description,
+                  item.description ?? 'No description available',
                   style: Theme.of(context).textTheme.bodyMedium,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
