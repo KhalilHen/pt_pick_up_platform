@@ -8,7 +8,6 @@ class AuthService {
 
    Future<AuthResponse> signInWithEmailAndPassword({required String email, required String password }) async {
 
-
     return await supabase.auth.signInWithPassword(email: email, password: password);
    }   
 }
