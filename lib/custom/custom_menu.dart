@@ -29,7 +29,13 @@ class customMenuWidgets {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.bodyMedium,
+           
+           style: Theme.of(context).textTheme.headlineLarge,
+            //   style:  TextStyle(
+
+            //            fontSize: 20,
+            // fontWeight: FontWeight.bold,
+            //   ),
             ),
             const SizedBox(height: 16),
             ListView.separated(
@@ -78,14 +84,23 @@ class customMenuWidgets {
                 const SizedBox(height: 4),
                 Text(
                   item.description ?? 'No description available',
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  // style: Theme.of(context).textTheme.bodyMedium,
+                  style: TextStyle(
+                    color: Colors.grey[600],
+
+                    fontSize: 14,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 9),
                 Text(
                   '\$${item.price}',
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: const TextStyle(
+                        color: Colors.deepOrange,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                  ),
                 ),
               ],
             ),
