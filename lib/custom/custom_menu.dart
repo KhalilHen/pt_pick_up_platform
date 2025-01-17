@@ -135,7 +135,7 @@ class customMenuWidgets {
 class MenuItemWidget extends StatefulWidget {
   final MenuItem item;
   final OrderController orderController;
-
+// final int  itemCount = 0;
   const MenuItemWidget({
     Key? key,
     required this.item,
@@ -146,6 +146,7 @@ class MenuItemWidget extends StatefulWidget {
   State<MenuItemWidget> createState() => _MenuItemWidgetState();
 }
 class _MenuItemWidgetState extends State<MenuItemWidget> {
+int  itemCount = 0;
 
   @override 
 
@@ -212,7 +213,9 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
             
             onPressed: () {
               // print('Add to cart: ${item.name}');
-              widget.orderController.addToCard(id: widget.item.id,  quantity:  1);
+
+              itemCount++;
+              widget.orderController.addToCard(id: widget.item.id,  quantity:  itemCount);
 
 
             },

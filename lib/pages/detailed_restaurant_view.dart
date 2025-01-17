@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/controllers/category_controller.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
+import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/custom/custom_menu.dart';
 import 'package:pt_pick_up_platform/models/category.dart';
 import 'package:pt_pick_up_platform/models/menu_section.dart';
@@ -20,7 +21,7 @@ class RestaurantDetailPage extends StatelessWidget {
     final customWidgets = customMenuWidgets();
     final categoryController = CategoryController();
     final menuController = MenuController1();
-
+    final orderController = OrderController();
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -235,7 +236,11 @@ class RestaurantDetailPage extends StatelessWidget {
           ],
         ),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+
+
+            orderController.order(itemIds: [] , quantities: [], restaurant: restaurant.name);
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.deepOrange,
             padding: const EdgeInsets.symmetric(vertical: 16),
