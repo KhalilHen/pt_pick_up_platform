@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/models/menu.dart';
-import '../main.dart';
 import '../controllers/menu_controller.dart';
-import 'package:pt_pick_up_platform/models/menu_section.dart';
-
+import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 class customMenuWidgets {
   final menuController = MenuController1();
+  final  orderController = OrderController();
 
   Widget buildMenuSection(BuildContext context, Map<String, dynamic> section) {
     String title = section['title'];
@@ -44,7 +44,7 @@ class customMenuWidgets {
               itemCount: items.length,
               separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
-                return buildMenuItem(context, items[index]);
+                return MenuItemWidget(item: items[index], orderController: orderController);
               },
             ),
           ],
@@ -52,9 +52,105 @@ class customMenuWidgets {
       },
     );
   }
+  }
 
-  Widget buildMenuItem(BuildContext context, MenuItem item) {
-    return Padding(
+//   Widget buildMenuItem(BuildContext context, MenuItem item) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Container(
+//             width: 80,
+//             height: 80,
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(8),
+//               image: item.imageUrl != null
+//                 ? DecorationImage(
+//                   image: NetworkImage(item.imageUrl!),
+//                   fit: BoxFit.cover,
+//                 )
+//                 : null,
+//             ),
+//             child: item.imageUrl == null
+//               ? const Icon(
+//                 Icons.image_not_supported,
+//                 size: 80,
+//                 color: Colors.grey,
+//                 )
+//               : null,
+//           ),
+//           const SizedBox(width: 12),
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   item.name,
+//                   style: Theme.of(context).textTheme.headlineMedium,
+//                 ),
+//                 const SizedBox(height: 4),
+//                 Text(
+//                   item.description ?? 'No description available',
+//                   style: TextStyle(
+//                     color: Colors.grey[600],
+//                     fontSize: 14,
+//                   ),
+//                   maxLines: 2,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//                 const SizedBox(height: 9),
+//                 Text(
+//                   '\$${item.price}',
+//                   style: const TextStyle(
+//                     color: Colors.deepOrange,
+//                     fontWeight: FontWeight.bold,
+//                     fontSize: 16,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//           IconButton(
+//             icon: const Icon(Icons.add_shopping_cart),
+//             color: Colors.deepOrange,
+            
+//             onPressed: () {
+//               // print('Add to cart: ${item.name}');
+//               orderController.addToCard(id: item.id,  quantity:  1);
+// //       setState {{ 
+
+
+
+// // }};
+
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//   }
+
+class MenuItemWidget extends StatefulWidget {
+  final MenuItem item;
+  final OrderController orderController;
+
+  const MenuItemWidget({
+    Key? key,
+    required this.item,
+    required this.orderController,
+  }) : super(key: key);
+
+  @override
+  State<MenuItemWidget> createState() => _MenuItemWidgetState();
+}
+class _MenuItemWidgetState extends State<MenuItemWidget> {
+
+  @override 
+
+   Widget build(BuildContext context,) {
+ return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,48 +158,37 @@ class customMenuWidgets {
           Container(
             width: 80,
             height: 80,
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.circular(8),
-            //   image: item.imageUrl != null
-            //       ? DecorationImage(
-            //           image: NetworkImage(item.imageUrl!),
-            //           fit: BoxFit.cover,
-            //         )
-            //       : null,
-            // ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              image: item.imageUrl != null
+              image: widget.item.imageUrl != null
                 ? DecorationImage(
-                  image: NetworkImage(item.imageUrl!),
+                  image: NetworkImage(widget.item.imageUrl!),
                   fit: BoxFit.cover,
                 )
                 : null,
             ),
-            child: item.imageUrl == null
+            child: widget.item.imageUrl == null
               ? const Icon(
                 Icons.image_not_supported,
                 size: 80,
                 color: Colors.grey,
                 )
               : null,
-            ),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.name,
+                  widget.item.name,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  item.description ?? 'No description available',
-                  // style: Theme.of(context).textTheme.bodyMedium,
+                 widget. item.description ?? 'No description available',
                   style: TextStyle(
                     color: Colors.grey[600],
-
                     fontSize: 14,
                   ),
                   maxLines: 2,
@@ -111,18 +196,30 @@ class customMenuWidgets {
                 ),
                 const SizedBox(height: 9),
                 Text(
-                  '\$${item.price}',
+                  '\$${widget.item.price}',
                   style: const TextStyle(
-                        color: Colors.deepOrange,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    color: Colors.deepOrange,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
               ],
             ),
           ),
+          IconButton(
+            icon: const Icon(Icons.add_shopping_cart),
+            color: Colors.deepOrange,
+            
+            onPressed: () {
+              // print('Add to cart: ${item.name}');
+              widget.orderController.addToCard(id: widget.item.id,  quantity:  1);
+
+
+            },
+          ),
         ],
       ),
     );
-  }
+   }
 }
+

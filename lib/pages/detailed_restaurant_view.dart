@@ -87,13 +87,13 @@ class RestaurantDetailPage extends StatelessWidget {
                   ),
 
 
-    Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-      child: 
+        Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+       child: 
         Text(
-'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tincidunt sem congue, malesuada enim sit amet, ornare ipsum. Pellentesque enim elit, interdum eget facilisis nec, congue condimentum diam. In tristique in mauris a malesuada. Cras consectetur lorem at lacus venenatis, non tristique neque gravida. Aenean non viverra nisi. Nullam vitae dolor egestas, viverra nisi a, ultricies justo. Nulla non nisi ligula. In tristique auctor leo.'
-,
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tincidunt sem congue, malesuada enim sit amet, ornare ipsum. Pellentesque enim elit, interdum eget facilisis nec, congue condimentum diam. In tristique in mauris a malesuada. Cras consectetur lorem at lacus venenatis, non tristique neque gravida. Aenean non viverra nisi. Nullam vitae dolor egestas, viverra nisi a, ultricies justo. Nulla non nisi ligula. In tristique auctor leo.'
+        ,
           maxLines: 4,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
@@ -204,6 +204,12 @@ class RestaurantDetailPage extends StatelessWidget {
       'title': section.name,
     });
   }).toList(),
+
+
+
+
+
+  
            );
 
             }
@@ -215,6 +221,37 @@ class RestaurantDetailPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.deepOrange,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: const Text(
+            'Start Order',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white
+            ),
+          ),
+        ),
       ),
     );
   }
