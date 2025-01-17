@@ -13,6 +13,7 @@ class AuthGate extends StatefulWidget {
 
 class _AuthGateState extends State<AuthGate> {
     late Future<bool> isFirstTimeUserValue;
+    late Future<bool> isSecondTimeUserValue;
 
   Future<bool> isFirstTimeUser() async {
     final prefs = await SharedPreferences.getInstance();
@@ -36,13 +37,14 @@ class _AuthGateState extends State<AuthGate> {
   void initState() {
     super.initState();
     isFirstTimeUserValue = isFirstTimeUser();
+    isSecondTimeUserValue = isSecondTimeUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
+    return FutureBuilder<List<bool>>(
 
-future: isFirstTimeUserValue,
+future: Future.wait([isFirstTimeUserValue, isSecondTimeUserValue]),
 
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -60,7 +62,7 @@ future: isFirstTimeUserValue,
             ),
           );
         }
-        if(snapshot.data == true) {
+        if(snapshot.data?.any((element) => element) == true) {
               //Navigate to the onboarding file
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(context, Routes.onBoarding);

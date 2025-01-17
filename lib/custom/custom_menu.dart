@@ -44,7 +44,9 @@ class customMenuWidgets {
               itemCount: items.length,
               separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
-                return MenuItemWidget(item: items[index], orderController: orderController);
+                return MenuItemWidget(item: items[index], orderController: orderController
+                
+                ) ;
               },
             ),
           ],
@@ -140,6 +142,7 @@ class MenuItemWidget extends StatefulWidget {
     Key? key,
     required this.item,
     required this.orderController,
+    
   }) : super(key: key);
 
   @override
@@ -215,7 +218,11 @@ int  itemCount = 0;
               // print('Add to cart: ${item.name}');
 
               itemCount++;
-              widget.orderController.addToCard(id: widget.item.id,  quantity:  itemCount);
+              widget.orderController.addToCard(id: widget.item.id,  quantity:  itemCount,
+              
+              // restaurantId: widget.restaurantId,
+              // price: widget.item.price,
+              );
 
 
             },

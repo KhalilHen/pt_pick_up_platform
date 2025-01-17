@@ -238,7 +238,6 @@ class RestaurantDetailPage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
 
-            // orderController.order(itemIds: [] , quantities: [], restaurant: restaurant.name);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.deepOrange,
