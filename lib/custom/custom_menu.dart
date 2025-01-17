@@ -62,16 +62,32 @@ class customMenuWidgets {
           Container(
             width: 80,
             height: 80,
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.circular(8),
+            //   image: item.imageUrl != null
+            //       ? DecorationImage(
+            //           image: NetworkImage(item.imageUrl!),
+            //           fit: BoxFit.cover,
+            //         )
+            //       : null,
+            // ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: item.imageUrl != null
-                  ? DecorationImage(
-                      image: NetworkImage(item.imageUrl!),
-                      fit: BoxFit.cover,
-                    )
-                  : null,
+                ? DecorationImage(
+                  image: NetworkImage(item.imageUrl!),
+                  fit: BoxFit.cover,
+                )
+                : null,
             ),
-          ),
+            child: item.imageUrl == null
+              ? const Icon(
+                Icons.image_not_supported,
+                size: 80,
+                color: Colors.grey,
+                )
+              : null,
+            ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
