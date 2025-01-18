@@ -1,11 +1,9 @@
-
-
-
-  enum OrderStatus {
-    PENDING,
-    ACCEPTED,
-    REJECTED,
-    CANCELLED,
-    readForPickUp,
-    COMPLETED
-  }
+enum OrderStatus {
+  Pending,
+  Accepted,
+  Rejected,
+  Kitchen,
+  Cancelled,
+  ReadForPickUp,
+  Completed,
+}

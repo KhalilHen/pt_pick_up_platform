@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
 import 'package:pt_pick_up_platform/custom/order_details.dart';
+import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 import 'package:pt_pick_up_platform/models/menu.dart';
+import 'package:pt_pick_up_platform/models/order.dart';
 import 'package:pt_pick_up_platform/models/order_items.dart';
 import '../main.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:pt_pick_up_platform/auth/auth_service.dart';
 
 class OrderController extends ChangeNotifier {
   Map<int, OrderItems> cartItems = {};
   int? currentRestaurantId;
   final cartNotifier = ValueNotifier<bool>(false);
-
+  final authController = AuthService();
   // final menuController = MenuController1();
 
   List<OrderItems> get _cartItems => cartItems.values.toList();
@@ -111,5 +115,73 @@ class OrderController extends ChangeNotifier {
     } else {
       addToCard(id: item.id, quantity: 1, item: item);
     }
+  }
+
+  Future<Order> createOrder(BuildContext context) async {
+    if (cartItems.isEmpty) {
+      throw Exception('No items in cart');
+    }
+
+    final userResponse = await authController.getLoggedInUser();
+    if (userResponse == null || userResponse.isEmpty) {
+      // throw Exception('User not found');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('User not found')),
+      );
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
+
+    try {
+      print('User: $userResponse');
+
+      final orderResponse = await supabase
+          .from('order')
+          .insert({
+            'user_id': userResponse,
+            'restaurant_id': currentRestaurantId,
+            'total_amount': totalAmount,
+          })
+          .select()
+          .single();
+
+      print('Order insert information:  $orderResponse');
+
+      final orderId = orderResponse['id'];
+
+      await supabase.from('order_items').insert(
+            cartItems.values
+                .map((item) => {
+                      'order_id': orderId,
+                      'menu_item_id': item.menuItemId,
+                      'quantity': item.quantity,
+                      'unit_price': item.unitPrice,
+                      'sub_total': item.totalAmount,
+                    })
+                .toList(),
+          );
+
+      final order = Order(
+        id: orderId,
+        userId: userResponse,
+        restaurantId: currentRestaurantId!,
+        totalAmount: totalAmount,
+        status: OrderStatus.Pending,
+      );
+      clearCart();
+
+      print('Order created: $order');
+      return order;
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+    throw Exception('Order creation failed');
+  }
+
+  void clearCart() {
+    cartItems.clear();
+    currentRestaurantId = null;
+    notifyListeners();
   }
 }

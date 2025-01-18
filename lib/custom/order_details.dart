@@ -161,7 +161,9 @@ class OrderDetailSheet extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () async {
+                            Provider.of<OrderController>(context, listen: false).createOrder(context);
+                          },
                           label: const Text(
                             'Place Order',
                             style: TextStyle(
