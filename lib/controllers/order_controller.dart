@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
+import 'package:pt_pick_up_platform/custom/order_details.dart';
 import 'package:pt_pick_up_platform/models/order_items.dart';
 import '../main.dart';
 import 'package:provider/provider.dart';
@@ -69,5 +70,23 @@ class OrderController extends ChangeNotifier {
       notifyListeners();
     } catch (e) {}
     print('Adding item $id to cart with quantity $quantity');
+  }
+
+  // void removeFromCart(int menuItemId) {
+  //   cartItems.remove(menuItemId);
+
+  //   if (cartItems.isEmpty) {
+  //     currentRestaurantId = null;
+  //   }
+  //   notifyListeners();
+  // }
+
+  void showOrderDetails(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => OrderDetailsSheet(cartItems: cartItems),
+    );
   }
 }

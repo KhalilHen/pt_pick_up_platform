@@ -15,7 +15,6 @@ class CartListeners extends StatelessWidget {
         return const SizedBox.shrink();
       }
 
-
       return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -29,7 +28,9 @@ class CartListeners extends StatelessWidget {
           ],
         ),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            orderController.showOrderDetails(context);
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.deepOrange,
             padding: const EdgeInsets.symmetric(vertical: 16),

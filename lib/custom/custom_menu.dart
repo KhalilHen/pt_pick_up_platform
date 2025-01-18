@@ -225,6 +225,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
               );
             },
           ),
+          IconButton(onPressed: null, icon: Icon(Icons.remove))
         ],
       ),
     );
