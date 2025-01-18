@@ -27,7 +27,7 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
   Widget build(BuildContext context) {
     // final customWidgets = customMenuWidgets(orderController: Provider.of<OrderController>(context));
     // final customWidgets = customMenuWidgets(orderController: orderController);
-       final orderController = Provider.of<OrderController>(context);
+    final orderController = Provider.of<OrderController>(context);
     final customWidgets = customMenuWidgets(orderController: orderController);
     final categoryController = CategoryController();
     final menuController = MenuController1();
@@ -203,42 +203,7 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Consumer<OrderController>(builder: (context, orderController, child) {
-        print('Rebuilding CartListeners: hasItems=${orderController.hasItems}');
-
-        if (!orderController.hasItems) {
-          print('No items in cart, hiding bottom bar');
-          return const SizedBox.shrink();
-        }
-
-        return Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 10,
-              ),
-            ],
-          ),
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text(
-              'Start Order',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-        );
-      }),
+      bottomNavigationBar: const CartListeners(),
     );
   }
 }
