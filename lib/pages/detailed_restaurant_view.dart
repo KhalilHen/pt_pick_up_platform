@@ -3,6 +3,7 @@ import 'package:pt_pick_up_platform/controllers/category_controller.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
 import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/custom/custom_menu.dart';
+import 'package:pt_pick_up_platform/listeners/cart_listener.dart';
 import 'package:pt_pick_up_platform/models/category.dart';
 import 'package:pt_pick_up_platform/models/menu_section.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
@@ -11,7 +12,7 @@ import '../models/restaurant_category.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
   final Restaurant restaurant;
-   RestaurantDetailPage({
+  RestaurantDetailPage({
     Key? key,
     required this.restaurant,
   }) : super(key: key);
@@ -21,7 +22,6 @@ class RestaurantDetailPage extends StatelessWidget {
     final customWidgets = customMenuWidgets();
     final categoryController = CategoryController();
     final menuController = MenuController1();
-    final orderController = OrderController();
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -31,7 +31,7 @@ class RestaurantDetailPage extends StatelessWidget {
             backgroundColor: Colors.deepOrange,
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
-                tag: 'restaurant-${restaurant.id}', 
+                tag: 'restaurant-${restaurant.id}',
                 child: Image.network(
                   restaurant.imgUrl ?? 'https://www.bartsboekje.com/wp-content/uploads/2020/06/riccardo-bergamini-O2yNzXdqOu0-unsplash-scaled.jpg',
                   fit: BoxFit.cover,
@@ -87,24 +87,19 @@ class RestaurantDetailPage extends StatelessWidget {
                     ],
                   ),
 
-
-        Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-       child: 
-        Text(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tincidunt sem congue, malesuada enim sit amet, ornare ipsum. Pellentesque enim elit, interdum eget facilisis nec, congue condimentum diam. In tristique in mauris a malesuada. Cras consectetur lorem at lacus venenatis, non tristique neque gravida. Aenean non viverra nisi. Nullam vitae dolor egestas, viverra nisi a, ultricies justo. Nulla non nisi ligula. In tristique auctor leo.'
-        ,
-          maxLines: 4,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-
-            color: Colors.grey[600],
-            fontSize: 16,
-          ),
-        ) 
-      ),
-    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        child: Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tincidunt sem congue, malesuada enim sit amet, ornare ipsum. Pellentesque enim elit, interdum eget facilisis nec, congue condimentum diam. In tristique in mauris a malesuada. Cras consectetur lorem at lacus venenatis, non tristique neque gravida. Aenean non viverra nisi. Nullam vitae dolor egestas, viverra nisi a, ultricies justo. Nulla non nisi ligula. In tristique auctor leo.',
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 16,
+                      ),
+                    )),
+                  ),
 
                   const SizedBox(height: 16),
                   SingleChildScrollView(
@@ -143,7 +138,7 @@ class RestaurantDetailPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // Menu Sections 
+                  // Menu Sections
                   // Column(
                   //   crossAxisAlignment: CrossAxisAlignment.start,
                   //   children: restaurant.menuSections!.map((section) {
@@ -153,109 +148,53 @@ class RestaurantDetailPage extends StatelessWidget {
                   //     });
                   //   }).toList(),
                   // ),
-            
 
-            FutureBuilder<List<MenuSection>>( 
-              
-                  // print('restaurant.id: ${restaurant.id}');
-                future: menuController.fetchMenuSections(restaurantId: restaurant.id),
+                  FutureBuilder<List<MenuSection>>(
 
+                      // print('restaurant.id: ${restaurant.id}');
+                      future: menuController.fetchMenuSections(restaurantId: restaurant.id),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasError) {
+                          print(snapshot.data);
 
-            
-            builder:  (context, snapshot)  {
+                          print(snapshot.error);
+                          return const Center(child: CircularProgressIndicator());
+                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return const Center(child: Text('No menu sections is avaibel!'));
+                        }
 
+                        List<MenuSection>? sections = snapshot.data!;
 
-              if(snapshot.connectionState == ConnectionState.waiting) {
+                        if (sections.isEmpty || sections == null) {
+                          return const Center(child: Text('No menu sections is avaibel!'));
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: sections.map((section) {
+                            // Debugging: Print each section's data
+                            print('Section ID: ${section.id}, Section Name: ${section.name}');
 
-          return Center(child: CircularProgressIndicator());
-              
-              }
-               if(snapshot.hasError) {
-                print(snapshot.data);
+                            // Handle sections with missing or empty names
+                            final sectionName = section.name.isEmpty ? 'Unnamed Section' : section.name;
 
-                      print(snapshot.error);
-                return   const Center(child: CircularProgressIndicator());
-
-             
-             
-              }
-              else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-
-                return const Center(child: Text('No menu sections is avaibel!'));
-
-              }
-            
-            List<MenuSection>?  sections = snapshot.data!;
-
-            if(sections.isEmpty || sections == null) {
-              return const Center(child: Text('No menu sections is avaibel!'));
-            }
-           return Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: sections.map((section) {
-    // Debugging: Print each section's data
-    print('Section ID: ${section.id}, Section Name: ${section.name}');
-
-    // Handle sections with missing or empty names
-    final sectionName = section.name.isEmpty ? 'Unnamed Section' : section.name;
-
-    // Call buildMenuSection with the actual model
-    return customWidgets.buildMenuSection(context, {
-      'id': section.id,
-      'title': section.name,
-    });
-  }).toList(),
-
-
-
-
-
-  
-           );
-
-            }
-            
-            
-            ),
+                            // Call buildMenuSection with the actual model
+                            return customWidgets.buildMenuSection(context, {
+                              'id': section.id,
+                              'title': section.name,
+                            });
+                          }).toList(),
+                        );
+                      }),
                 ],
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 10,
-            ),
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepOrange,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: const Text(
-            'Start Order',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar: const CartListeners(),
     );
   }
 }

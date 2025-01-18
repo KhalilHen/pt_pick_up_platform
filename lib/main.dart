@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:pt_pick_up_platform/auth/auth_gate.dart';
+import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/onboarding/pages/introduction.dart';
 import 'package:pt_pick_up_platform/onboarding/start_page.dart';
 import 'package:pt_pick_up_platform/pages/homepage.dart';
+import 'package:pt_pick_up_platform/pages/login.dart';
 import 'package:pt_pick_up_platform/routes/routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,14 +19,18 @@ Future<void> main() async {
   );
 
 
-  
   //To force user to use only portrait mode
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(MyApp());
+runApp(
+    ChangeNotifierProvider(
+      create: (_) => OrderController(),
+      child: MyApp(),
+    ),
+  );
 }
 
 final supabase = Supabase.instance.client;
@@ -87,13 +95,15 @@ class MyApp extends StatelessWidget {
 
       // home: const AuthGate(),
       // home: Introduction(),
-      home: Introduction(), //Easier for making the homepage
+      // home: Introduction(), //Easier for making the homepage
+      home: AuthGate(),
+      // home: LoginPage(),
       routes: {
         Routes.onBoarding: (context) => Introduction(),
-        // Routes.authGate: (context) => AuthGate(),
+        Routes.authGate: (context) => AuthGate(),
         Routes.home: (context) => HomePage(),
         // Routes.signUp: (context) => SignUp(),
-        // Routes.login: (context) => Login(),
+        Routes.login: (context) => LoginPage(),
       },
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
