@@ -27,7 +27,7 @@ class CartListeners extends StatelessWidget {
               ),
             ],
           ),
-          child: ElevatedButton(
+          child: ElevatedButton.icon(
             onPressed: () => orderController.showOrderDetails(context),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepOrange,
@@ -36,7 +36,11 @@ class CartListeners extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text(
+            icon: const Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
+            ),
+            label: const Text(
               'View Cart',
               style: TextStyle(
                 fontSize: 16,
