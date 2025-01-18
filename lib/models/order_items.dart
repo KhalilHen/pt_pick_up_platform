@@ -32,8 +32,5 @@ class OrderItems {
     );
   }
 
-  // // Getter methods to access MenuItem fields
-  // String get itemName => menuItem.name;
-  // String? get itemDescription => menuItem.description;
-  // String? get itemImageUrl => menuItem.imageUrl;
+
 }

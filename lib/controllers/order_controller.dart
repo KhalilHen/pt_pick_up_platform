@@ -47,6 +47,7 @@ class OrderController extends ChangeNotifier {
 
       final totalAmount = price * quantity;
 
+      print('Debug - MenuItem data: ${menuitem.toString()}');
       if (cartItems.containsKey(id)) {
         final existingItem = cartItems[id]!;
         cartItems[id] = OrderItems(

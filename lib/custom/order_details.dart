@@ -7,7 +7,7 @@ import 'package:pt_pick_up_platform/models/order_items.dart';
 class OrderDetailSheet extends StatelessWidget {
   final Map<int, OrderItems> cartItems;
 
-  const OrderDetailSheet({Key? key, required this.cartItems}) : super(key: key);
+  const OrderDetailSheet({required this.cartItems, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,6 @@ class OrderDetailSheet extends StatelessWidget {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-//Order
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
@@ -42,15 +41,81 @@ class OrderDetailSheet extends StatelessWidget {
                         'Your Cart',
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close))
+                      IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close))
                     ],
                   ),
                 ),
                 Expanded(
-                  child: Text('test'),
+                  child: Consumer<OrderController>(
+                    builder: (context, orderController, child) {
+                      final items = orderController.cartItems.values.toList();
+                      return ListView.separated(
+                        controller: controller,
+                        itemCount: orderController.cartItems.length,
+                        separatorBuilder: (_, __) => const Divider(),
+                        itemBuilder: (context, index) {
+                          // final item = orderController.cartItems[index]!;
+                          final item = items[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: item.menuItem.imageUrl != null
+                                        ? DecorationImage(
+                                            image: NetworkImage(item.menuItem.imageUrl!),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null,
+                                    color: item.menuItem.imageUrl == null ? Colors.grey : null,
+                                  ),
+                                  child: item.menuItem.imageUrl == null ? const Icon(Icons.fastfood) : null,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.menuItem.name,
+                                        style: Theme.of(context).textTheme.headlineMedium,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '€${item.menuItem.price}',
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.remove_circle_outline),
+                                      onPressed: () {},
+                                    ),
+                                    Text(
+                                      '${item.quantity}',
+                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    ),
+                                    IconButton(onPressed: () {}, icon: const Icon(Icons.add_circle_outline))
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-               
-                //Order subtotal
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(color: Colors.white, boxShadow: [
@@ -80,9 +145,7 @@ class OrderDetailSheet extends StatelessWidget {
                           );
                         },
                       ),
-                      const SizedBox(
-                        height: 16,
-                      )
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
