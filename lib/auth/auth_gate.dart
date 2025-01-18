@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pt_pick_up_platform/routes/routes.dart';
+
 class AuthGate extends StatefulWidget {
   const AuthGate({
     Key? key,
@@ -12,8 +13,8 @@ class AuthGate extends StatefulWidget {
 }
 
 class _AuthGateState extends State<AuthGate> {
-    late Future<bool> isFirstTimeUserValue;
-    late Future<bool> isSecondTimeUserValue;
+  late Future<bool> isFirstTimeUserValue;
+  late Future<bool> isSecondTimeUserValue;
 
   Future<bool> isFirstTimeUser() async {
     final prefs = await SharedPreferences.getInstance();
@@ -43,9 +44,7 @@ class _AuthGateState extends State<AuthGate> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<bool>>(
-
-future: Future.wait([isFirstTimeUserValue, isSecondTimeUserValue]),
-
+      future: Future.wait([isFirstTimeUserValue, isSecondTimeUserValue]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
@@ -62,19 +61,18 @@ future: Future.wait([isFirstTimeUserValue, isSecondTimeUserValue]),
             ),
           );
         }
-        if(snapshot.data?.any((element) => element) == true) {
-              //Navigate to the onboarding file
+        if (snapshot.data?.any((element) => element) == true) {
+          //Navigate to the onboarding file
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(context, Routes.onBoarding);
+            Navigator.pushNamed(context, Routes.onBoarding);
           });
-        }
-        else {
+        } else {
           //Navigate to the home page
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(context, Routes.home);
+            Navigator.pushNamedAndRemoveUntil(context, Routes.home, (Route<dynamic> route) => false);
           });
         }
-          
+
         return const Scaffold(
           body: Center(
             child: SizedBox(),

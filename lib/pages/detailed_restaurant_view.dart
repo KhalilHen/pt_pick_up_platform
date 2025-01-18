@@ -46,7 +46,13 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                   fit: BoxFit.cover,
                 ),
               ),
-              title: Text(widget.restaurant.name),
+              title: Text(
+                widget.restaurant.name,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.headlineLarge?.color,
+                  // fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           SliverToBoxAdapter(

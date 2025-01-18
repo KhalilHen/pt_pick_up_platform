@@ -219,6 +219,7 @@ class _MenuItemWidgetState extends State<MenuItemWidget> {
               itemCount++;
               widget.orderController.addToCard(
                 id: widget.item.id, quantity: itemCount,
+              item:   widget.item
 
                 // restaurantId: widget.restaurantId,
                 // price: widget.item.price,
