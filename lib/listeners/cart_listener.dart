@@ -9,9 +9,13 @@ class CartListeners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<OrderController>(builder: (context, orderController, child) {
+      print('Rebuilding CartListeners: hasItems=${orderController.hasItems}');
+
       if (!orderController.hasItems) {
         return const SizedBox.shrink();
       }
+
+
       return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

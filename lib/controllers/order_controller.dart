@@ -5,15 +5,16 @@ import '../main.dart';
 import 'package:provider/provider.dart';
 
 class OrderController extends ChangeNotifier {
-  Map<int, OrderItems> _cartItems = {};
+  Map<int, OrderItems> cartItems = {};
   int? currentRestaurantId;
 
   // final menuController = MenuController1();
 
-  List<OrderItems> get cartItems => _cartItems.values.toList();
+  List<OrderItems> get _cartItems => cartItems.values.toList();
+
   bool get hasItems => _cartItems.isNotEmpty;
-  int get totalAmount {
-    return _cartItems.values.fold(0, (sum, item) => sum + item.totalAmount);
+  int get toalAmount {
+    return cartItems.values.fold(0, (sum, item) => sum + item.totalAmount);
   }
 
   void addToCard({required int id, required int quantity}) async {
@@ -35,7 +36,7 @@ class OrderController extends ChangeNotifier {
       print('Restaurant ID: $restaurantId');
       // print('menuitem: $menuitem');
 
-      if (_cartItems.isEmpty) {
+      if (cartItems.isEmpty) {
         currentRestaurantId = restaurantId;
       } else if (currentRestaurantId != restaurantId) {
         throw Exception('You can only order from one restaurant at a time');
@@ -43,9 +44,9 @@ class OrderController extends ChangeNotifier {
 
       final totalAmount = price * quantity;
 
-      if (_cartItems.containsKey(id)) {
+      if (cartItems.containsKey(id)) {
         final existingItem = cartItems[id]!;
-        _cartItems[id] = OrderItems(
+        cartItems[id] = OrderItems(
           id: existingItem.id,
           orderId: existingItem.orderId,
           menuItemId: id,
@@ -55,7 +56,7 @@ class OrderController extends ChangeNotifier {
         );
         print("total amount:  €$totalAmount"); //Testing whether it works
       } else {
-        _cartItems[id] = OrderItems(
+        cartItems[id] = OrderItems(
             id: DateTime.now().millisecondsSinceEpoch,
             orderId: 0, //Temporary value, will be updated when order is placed
             menuItemId: id,
@@ -65,8 +66,6 @@ class OrderController extends ChangeNotifier {
 
         print("total amount:  €$totalAmount");
       }
-      print('Current cart items: ${_cartItems.length}');
-
       notifyListeners();
     } catch (e) {}
     print('Adding item $id to cart with quantity $quantity');

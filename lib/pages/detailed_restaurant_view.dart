@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pt_pick_up_platform/controllers/category_controller.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
 import 'package:pt_pick_up_platform/controllers/order_controller.dart';
@@ -10,7 +11,7 @@ import 'package:pt_pick_up_platform/models/restaurant.dart';
 
 import '../models/restaurant_category.dart';
 
-class RestaurantDetailPage extends StatelessWidget {
+class RestaurantDetailPage extends StatefulWidget {
   final Restaurant restaurant;
   RestaurantDetailPage({
     Key? key,
@@ -18,8 +19,16 @@ class RestaurantDetailPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<RestaurantDetailPage> createState() => _RestaurantDetailPageState();
+}
+
+class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
+  @override
   Widget build(BuildContext context) {
-    final customWidgets = customMenuWidgets();
+    // final customWidgets = customMenuWidgets(orderController: Provider.of<OrderController>(context));
+    // final customWidgets = customMenuWidgets(orderController: orderController);
+       final orderController = Provider.of<OrderController>(context);
+    final customWidgets = customMenuWidgets(orderController: orderController);
     final categoryController = CategoryController();
     final menuController = MenuController1();
     return Scaffold(
@@ -31,13 +40,13 @@ class RestaurantDetailPage extends StatelessWidget {
             backgroundColor: Colors.deepOrange,
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
-                tag: 'restaurant-${restaurant.id}',
+                tag: 'restaurant-${widget.restaurant.id}',
                 child: Image.network(
-                  restaurant.imgUrl ?? 'https://www.bartsboekje.com/wp-content/uploads/2020/06/riccardo-bergamini-O2yNzXdqOu0-unsplash-scaled.jpg',
+                  widget.restaurant.imgUrl ?? 'https://www.bartsboekje.com/wp-content/uploads/2020/06/riccardo-bergamini-O2yNzXdqOu0-unsplash-scaled.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
-              title: Text(restaurant.name),
+              title: Text(widget.restaurant.name),
             ),
           ),
           SliverToBoxAdapter(
@@ -53,14 +62,14 @@ class RestaurantDetailPage extends StatelessWidget {
                         children: [
                           const Icon(Icons.star, color: Colors.amber, size: 20),
                           Text(
-                            ' ${restaurant.rating.toStringAsFixed(1)} ',
+                            ' ${widget.restaurant.rating.toStringAsFixed(1)} ',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            ' ${restaurant.reviewCount} reviews',
+                            ' ${widget.restaurant.reviewCount} reviews',
                             style: TextStyle(
                               color: Colors.grey[600],
                             ),
@@ -107,7 +116,7 @@ class RestaurantDetailPage extends StatelessWidget {
                     child: Row(
                       children: [
                         FutureBuilder<List<Category>>(
-                          future: categoryController.fetchRestaurantCategory(restaurantId: restaurant.id),
+                          future: categoryController.fetchRestaurantCategory(restaurantId: widget.restaurant.id),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return Center(child: CircularProgressIndicator());
@@ -152,7 +161,7 @@ class RestaurantDetailPage extends StatelessWidget {
                   FutureBuilder<List<MenuSection>>(
 
                       // print('restaurant.id: ${restaurant.id}');
-                      future: menuController.fetchMenuSections(restaurantId: restaurant.id),
+                      future: menuController.fetchMenuSections(restaurantId: widget.restaurant.id),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
@@ -194,7 +203,42 @@ class RestaurantDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: const CartListeners(),
+      bottomNavigationBar: Consumer<OrderController>(builder: (context, orderController, child) {
+        print('Rebuilding CartListeners: hasItems=${orderController.hasItems}');
+
+        if (!orderController.hasItems) {
+          print('No items in cart, hiding bottom bar');
+          return const SizedBox.shrink();
+        }
+
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepOrange,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Start Order',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
