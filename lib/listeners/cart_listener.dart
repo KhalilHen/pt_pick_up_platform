@@ -8,42 +8,45 @@ class CartListeners extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<OrderController>(builder: (context, orderController, child) {
-      print('Rebuilding CartListeners: hasItems=${orderController.hasItems}');
+    final orderController = Provider.of<OrderController>(context, listen: false);
 
-      if (!orderController.hasItems) {
-        return const SizedBox.shrink();
-      }
+    return ValueListenableBuilder<bool>(
+      valueListenable: orderController.cartNotifier,
+      builder: (context, hasItems, child) {
+        if (!hasItems) return const SizedBox.shrink();
 
-      return Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 10,
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: ElevatedButton(
+            onPressed: () => orderController.showOrderDetails(context),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepOrange,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-            orderController.showOrderDetails(context);
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepOrange,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+            child: const Text(
+              'View Cart',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
-          child: const Text(
-            'Start Order',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class OrderController extends ChangeNotifier {
   Map<int, OrderItems> cartItems = {};
   int? currentRestaurantId;
+  final cartNotifier = ValueNotifier<bool>(false);
 
   // final menuController = MenuController1();
 
@@ -23,6 +24,7 @@ class OrderController extends ChangeNotifier {
     if (quantity <= 0) {
       throw Exception('Quanity must be greater then 0');
     }
+
     try {
       // final menuItem = await menuController.fetchMenuItem(itemId: id);
       print("itemId: $id");
@@ -47,7 +49,7 @@ class OrderController extends ChangeNotifier {
 
       final totalAmount = price * quantity;
 
-      print('Debug - MenuItem data: ${menuitem.toString()}');
+      //  print('Debug - MenuItem data: ${menuitem.toString()}');
       if (cartItems.containsKey(id)) {
         final existingItem = cartItems[id]!;
         cartItems[id] = OrderItems(
@@ -72,6 +74,8 @@ class OrderController extends ChangeNotifier {
 
         print("total amount:  €$totalAmount");
       }
+
+      cartNotifier.value = hasItems;
       notifyListeners();
     } catch (e) {}
     print('Adding item $id to cart with quantity $quantity');
@@ -84,5 +88,28 @@ class OrderController extends ChangeNotifier {
       backgroundColor: Colors.transparent,
       builder: (context) => OrderDetailSheet(cartItems: cartItems),
     );
+  }
+
+  void removeItem(int id) {
+    if (cartItems.containsKey(id)) {
+      final existingItem = cartItems[id]!;
+      if (existingItem.quantity > 1) {
+        addToCard(id: id, quantity: existingItem.quantity - 1, item: existingItem.menuItem);
+      } else {
+        cartItems.remove(id);
+        cartNotifier.value = hasItems;
+
+        notifyListeners();
+      }
+    }
+  }
+
+  void addItem(MenuItem item) {
+    if (cartItems.containsKey(item.id)) {
+      final existingItem = cartItems[item.id]!;
+      addToCard(id: item.id, quantity: existingItem.quantity + 1, item: item);
+    } else {
+      addToCard(id: item.id, quantity: 1, item: item);
+    }
   }
 }

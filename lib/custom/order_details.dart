@@ -98,14 +98,26 @@ class OrderDetailSheet extends StatelessWidget {
                                 Row(
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.remove_circle_outline),
-                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.remove_circle_outline,
+                                        color: Colors.deepOrange,
+                                      ),
+                                      onPressed: () {
+                                        orderController.removeItem(item.menuItem.id);
+                                      },
                                     ),
                                     Text(
                                       '${item.quantity}',
                                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                     ),
-                                    IconButton(onPressed: () {}, icon: const Icon(Icons.add_circle_outline))
+                                    IconButton(
+                                        onPressed: () {
+                                          orderController.addItem(item.menuItem);
+                                        },
+                                        icon: const Icon(
+                                          Icons.add_circle_outline,
+                                          color: Colors.deepOrange,
+                                        ))
                                   ],
                                 ),
                               ],
