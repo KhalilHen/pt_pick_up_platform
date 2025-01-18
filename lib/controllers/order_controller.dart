@@ -81,7 +81,7 @@ class OrderController extends ChangeNotifier {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => OrderDetailsSheet(cartItems: cartItems),
+      builder: (context) => OrderDetailSheet(cartItems: cartItems),
     );
   }
 }
