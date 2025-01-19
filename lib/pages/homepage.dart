@@ -303,15 +303,15 @@ class HomePage extends StatelessWidget {
                                                     borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                                                   ),
                                                   child: Center(
-                                                    child: restaurantItem.imgUrl != null
-                                                        ? Image.network(
-                                                            restaurantItem.imgUrl!,
-                                                            fit: BoxFit.cover,
-                                                          )
-                                                        : const Icon(
+                                                    child: restaurantItem.imgUrl == null || restaurantItem.imgUrl!.isEmpty
+                                                        ? const Icon(
                                                             Icons.image,
                                                             size: 40,
                                                             color: Colors.grey,
+                                                          )
+                                                        : Image.network(
+                                                            restaurantItem.imgUrl!,
+                                                            fit: BoxFit.cover,
                                                           ),
                                                   ),
                                                 ),

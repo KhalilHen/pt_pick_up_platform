@@ -41,10 +41,26 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                 tag: 'restaurant-${widget.restaurant.id}',
-                child: Image.network(
-                  widget.restaurant.imgUrl ?? 'https://www.bartsboekje.com/wp-content/uploads/2020/06/riccardo-bergamini-O2yNzXdqOu0-unsplash-scaled.jpg',
-                  fit: BoxFit.cover,
-                ),
+                child: widget.restaurant.imgUrl == null || widget.restaurant.imgUrl!.isEmpty
+                    ? Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.grey[300],
+                        child: Center(
+                          child: const Icon(
+                            Icons.image,
+                            size: 100,
+                            // color: Colors.white,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      )
+                    : Image.network(
+                        widget.restaurant.imgUrl ?? 'https://www.bartsboekje.com/wp-content/uploads/2020/06/riccardo-bergamini-O2yNzXdqOu0-unsplash-scaled.jpg',
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
               ),
               title: Text(
                 widget.restaurant.name,
