@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pt_pick_up_platform/listeners/order_cancel_screen.dart';
 // import 'package:flutter/services.dart';
 import 'package:pt_pick_up_platform/listeners/order_listener.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
@@ -51,7 +52,8 @@ class _OrderInitialScreenState extends State<OrderInitialScreen> with TickerProv
         setState(() {
           currentState = InitialOrderState.Cancelled;
         });
-
+        HapticFeedback.mediumImpact();
+        navigateToCancelledScreen();
         // HapticFeedback.acmediumImpact();
         // navigateToCancelledScreen();
       } else if (status == OrderStatus.Accepted) {
@@ -75,6 +77,16 @@ class _OrderInitialScreenState extends State<OrderInitialScreen> with TickerProv
         },
       ),
     );
+  }
+
+  void navigateToCancelledScreen() {
+    Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => OrderCancelledScreen(orderId: widget.orderId),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            }));
   }
 
   @override
