@@ -20,6 +20,57 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
   late OrderStatusListener statusListener;
 
   OrderStatus currentStatus = OrderStatus.Accepted;
+
+  @override
+  void initState() {
+    super.initState();
+    setupStatusListener();
+  }
+
+  void setupStatusListener() {
+    statusListener = OrderStatusListener(15); //TODO replace later with orderId
+    statusListener.startListening((status) {
+      setState(() {
+        switch (status) {
+          case OrderStatus.Accepted:
+            updateStatus(OrderStatus.Accepted);
+            break;
+
+          case OrderStatus.Kitchen:
+            updateStatus(OrderStatus.Kitchen);
+
+            break;
+
+          case OrderStatus.ReadForPickUp:
+            updateStatus(OrderStatus.ReadForPickUp);
+            break;
+
+          case OrderStatus.Completed:
+            updateStatus(OrderStatus.Completed);
+            break;
+
+          default:
+            print('Status not found');
+            break;
+        }
+      });
+    });
+  }
+
+  void updateStatus(OrderStatus newStatus) {
+    if (currentStatus != newStatus) {
+      currentStatus = newStatus;
+      print('Status Updated: $currentStatus');
+      HapticFeedback.mediumImpact();
+    }
+  }
+
+  @override
+  void dispose() {
+    statusListener.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,13 +100,23 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
                   const SizedBox(
                     height: 24,
                   ),
-                  OrderTimeLine(),
+                  statusTimeLine(),
                 ],
               ),
             ),
           ))
         ],
       )),
+    );
+  }
+
+  Widget statusTimeLine() {
+    return Column(
+      children: OrderStatus.values.map((status) {
+        final isCompleted = status.index <= OrderStatus.Accepted.index;
+        final isActive = status == currentStatus;
+        return OrderTimeLine(status: status, isCompleted: isCompleted, isActive: isActive);
+      }).toList(),
     );
   }
 }
@@ -133,4 +194,3 @@ Widget timeEstimate() {
     ),
   );
 }
-

@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 
 class OrderTimeLine extends StatelessWidget {
-
+  final OrderStatus status;
+  final bool isCompleted;
+  final bool isActive;
 
   const OrderTimeLine({
-    Key? key,
-
-  }) : super(key: key);
+    // Key? key,
+    required this.status,
+    this.isCompleted = false,
+    this.isActive = false,
+  });
+  // : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,38 +33,86 @@ class OrderTimeLine extends StatelessWidget {
 
   Widget statusDot() {
     return Container(
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.deepOrange, border: Border.all(color: Colors.deepOrange, width: 3)),
-        child: const Icon(Icons.check, size: 20, color: Colors.white));
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isCompleted ? Colors.deepOrange : Colors.grey[300],
+        border: isActive ? Border.all(color: Colors.deepOrange, width: 3) : null,
+      ),
+      child: isCompleted ? const Icon(Icons.check, size: 20, color: Colors.white) : null,
+    );
   }
 
   Widget statusCard() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.deepOrange.withAlpha((0.1 * 255).round()),
+        color: isActive ? Colors.deepOrange.withOpacity(0.1) : Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.deepOrange),
+        border: Border.all(
+          color: isActive ? Colors.deepOrange : Colors.grey[300]!,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //Status title
           Text(
-            'Order Confirmed',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.deepOrange),
+            getStatusTitle(),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: isActive ? Colors.deepOrange : Colors.black,
+            ),
           ),
-
-          const SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           Text(
-            'description',
-            style: TextStyle(color: Colors.grey[600], fontSize: 14),
-          )
+            getStatusDescription(),
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  String getStatusTitle() {
+    switch (status) {
+      case OrderStatus.Pending:
+        return "Order waiting to be confirmed";
+
+      case OrderStatus.Accepted:
+        return "Your order is Accepted";
+
+      case OrderStatus.Kitchen:
+        return "Preparing your order";
+
+      case OrderStatus.ReadForPickUp:
+        return "Your order is read for pick-up";
+
+      case OrderStatus.Completed:
+        return "Order Completed";
+
+      default:
+        return "Wen't something wrong";
+    }
+  }
+
+  String getStatusDescription() {
+    switch (status) {
+      case OrderStatus.Accepted:
+        return "Your order is confirmed";
+
+      case OrderStatus.Kitchen:
+        return "Your order is being prepared";
+
+      case OrderStatus.ReadForPickUp:
+        return "Your order is ready to be picked up";
+
+      default:
+        return "Wen't something wrong";
+    }
   }
 }
