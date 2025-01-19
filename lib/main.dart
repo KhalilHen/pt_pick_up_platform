@@ -18,14 +18,13 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-
   //To force user to use only portrait mode
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-runApp(
+  runApp(
     ChangeNotifierProvider(
       create: (_) => OrderController(),
       child: MyApp(),
@@ -43,60 +42,38 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-    primarySwatch: Colors.deepOrange,
-    appBarTheme: const AppBarTheme(
+        primarySwatch: Colors.deepOrange,
+        appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(color: Colors.white),
-
-
-
-
-
-
-      titleTextStyle: TextStyle(
-        color: Colors.white,
-        fontSize: 24.0,
-        fontWeight: FontWeight.bold,
-
-      ),
-    ),
-
-
-
-
-    // Primary text on light background
-    textTheme: const TextTheme(
-
-
-    headlineLarge: TextStyle( 
-      color: Colors.black, 
-      fontSize: 20, 
-      fontWeight: FontWeight.bold, 
-    ),
-
-
-
-    headlineMedium: TextStyle(
-      color: Colors.black87,
-      fontSize: 16,
-      fontWeight: FontWeight.bold ,
-    ),
-      //Secondary text/body  on light background
-  bodyMedium: TextStyle(
-    color: Colors.black87,
-    fontSize: 14,
-    fontWeight: FontWeight.bold
-  )
-    ),
-  
- 
-
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+    
+        // Primary text on light background
+        textTheme: const TextTheme(
+            headlineLarge: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            headlineMedium: TextStyle(
+              color: Colors.black87,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            //Secondary text/body  on light background
+            bodyMedium: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold)),
       ),
       debugShowCheckedModeBanner: false,
-
+    
       // home: const AuthGate(),
       // home: Introduction(),
       // home: Introduction(), //Easier for making the homepage
       home: AuthGate(),
+      // home: OrderStatusScreen(),
       // home: LoginPage(),
       routes: {
         Routes.onBoarding: (context) => Introduction(),
