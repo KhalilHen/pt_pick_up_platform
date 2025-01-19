@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/custom/order_details.dart';
+import 'package:pt_pick_up_platform/listeners/initial_order_screen.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 import 'package:pt_pick_up_platform/models/menu.dart';
@@ -177,7 +178,7 @@ class OrderController extends ChangeNotifier {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => OrderStatusScreen(
+          builder: (context) => OrderInitialScreen(
             orderId: order.id,
           ),
         ),

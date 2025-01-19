@@ -8,10 +8,15 @@ enum OrderStatus {
   Completed,
 }
 
-enum CustomerOrderStatus { 
-
+enum CustomerOrderStatus {
   Confirmed,
   Preparing,
   ReadyForPickUp,
   Completed,
 }
+
+enum InitialOrderState { 
+  Pending, 
+  Accepted, 
+  Cancelled 
+  }
