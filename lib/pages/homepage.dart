@@ -234,7 +234,6 @@ class HomePage extends StatelessWidget {
                         ),
                         FutureBuilder<List<Restaurant>>(
                           future: restaurantController.fetchRestaurants(),
-
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return const Center(child: CircularProgressIndicator());
@@ -266,10 +265,9 @@ class HomePage extends StatelessWidget {
                                   itemCount: restaurant.length,
                                   itemBuilder: (context, index) {
                                     final restaurantItem = restaurant[index];
-                            // final retrieveCategory = await categoryController.fetchRestaurantCategory(restaurantId: restaurantItem.id);
-                        // final retrieveCategory = await categoryController.fetchRestaurantCategory(restaurantId: restaurantItem.id); 
-                        final  restaurantId = restaurantItem.id;
-
+                                    // final retrieveCategory = await categoryController.fetchRestaurantCategory(restaurantId: restaurantItem.id);
+                                    // final retrieveCategory = await categoryController.fetchRestaurantCategory(restaurantId: restaurantItem.id);
+                                    final restaurantId = restaurantItem.id;
 
                                     return GestureDetector(
                                       onTap: () {
@@ -332,10 +330,7 @@ class HomePage extends StatelessWidget {
                                                         maxLines: 1,
                                                         overflow: TextOverflow.ellipsis,
                                                       ),
-                                                      Text(
-                                                        // restaurantItem.categories.toString(),
-                                                        '',
-                                                        style: Theme.of(context).textTheme.bodyMedium,                                                      ),
+                                                      buildCategory(restaurantId: restaurantId),
                                                       Row(
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
@@ -399,4 +394,42 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget buildCategory({required restaurantId}) {
+  return FutureBuilder<List<Category>>(
+      future: CategoryController().fetchRestaurantCategory(restaurantId: restaurantId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Text('There was an error');
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Text(
+            "  No category's available for this restaurant",
+            overflow: TextOverflow.ellipsis,
+          );
+        } else {
+          final categories = snapshot.data!;
+          return Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: categories.map((category) {
+              return Container(
+                margin: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  category.name,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              );
+            }).toList(),
+          );
+        }
+      });
 }
