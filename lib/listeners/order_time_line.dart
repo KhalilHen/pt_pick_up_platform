@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 
 class OrderTimeLine extends StatelessWidget {
-  final OrderStatus status;
+  final CustomerOrderStatus status;
   final bool isCompleted;
   final bool isActive;
 
@@ -80,20 +80,20 @@ class OrderTimeLine extends StatelessWidget {
 
   String getStatusTitle() {
     switch (status) {
-      case OrderStatus.Pending:
-        return "Order waiting to be confirmed";
+      // case CustomerOrderStatus.Waiting:
+      //   return "Order waiting to be confirmed";
 
-      case OrderStatus.Accepted:
-        return "Your order is Accepted";
+      case CustomerOrderStatus.Confirmed:
+        return "Your order is Confirmed";
 
-      case OrderStatus.Kitchen:
+      case CustomerOrderStatus.Preparing:
         return "Preparing your order";
 
-      case OrderStatus.ReadForPickUp:
+      case CustomerOrderStatus.ReadyForPickUp:
         return "Your order is read for pick-up";
 
-      case OrderStatus.Completed:
-        return "Order Completed";
+      // case CustomerOrderStatus.:
+      //   return "Order Completed";
 
       default:
         return "Wen't something wrong";

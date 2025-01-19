@@ -7,3 +7,10 @@ enum OrderStatus {
   ReadForPickUp,
   Completed,
 }
+
+enum CustomerOrderStatus { 
+
+  Confirmed,
+  Preparing,
+  ReadyForPickUp
+}

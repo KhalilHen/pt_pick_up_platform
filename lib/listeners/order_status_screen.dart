@@ -19,7 +19,7 @@ class OrderStatusScreen extends StatefulWidget {
 class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProviderStateMixin {
   late OrderStatusListener statusListener;
 
-  OrderStatus currentStatus = OrderStatus.Accepted;
+CustomerOrderStatus currentStatus = CustomerOrderStatus.Confirmed;
 
   @override
   void initState() {
@@ -33,20 +33,20 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
       setState(() {
         switch (status) {
           case OrderStatus.Accepted:
-            updateStatus(OrderStatus.Accepted);
+            updateStatus(CustomerOrderStatus.Confirmed);
             break;
 
           case OrderStatus.Kitchen:
-            updateStatus(OrderStatus.Kitchen);
+            updateStatus(CustomerOrderStatus.Preparing);
 
             break;
 
           case OrderStatus.ReadForPickUp:
-            updateStatus(OrderStatus.ReadForPickUp);
+            updateStatus(CustomerOrderStatus.ReadyForPickUp);
             break;
 
           case OrderStatus.Completed:
-            updateStatus(OrderStatus.Completed);
+            updateStatus(CustomerOrderStatus.Confirmed);
             break;
 
           default:
@@ -57,7 +57,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
     });
   }
 
-  void updateStatus(OrderStatus newStatus) {
+  void updateStatus(CustomerOrderStatus newStatus) {
     if (currentStatus != newStatus) {
       currentStatus = newStatus;
       print('Status Updated: $currentStatus');
@@ -112,8 +112,8 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
 
   Widget statusTimeLine() {
     return Column(
-      children: OrderStatus.values.map((status) {
-        final isCompleted = status.index <= OrderStatus.Accepted.index;
+      children: CustomerOrderStatus.values.map((status) {
+        final isCompleted = status.index <= CustomerOrderStatus.Confirmed.index;
         final isActive = status == currentStatus;
         return OrderTimeLine(status: status, isCompleted: isCompleted, isActive: isActive);
       }).toList(),
