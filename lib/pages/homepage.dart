@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/controllers/category_controller.dart';
+import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/controllers/restaurant_controller.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
@@ -16,7 +17,7 @@ class HomePage extends StatelessWidget {
     final menuController = MenuController1();
     final restaurantController = RestaurantController();
     final screenSize = MediaQuery.of(context).size;
-
+    final orderController = OrderController();
     final screenWidth = screenSize.width;
 
     final itemWidth = (screenSize.width / 2) - 24;
@@ -45,7 +46,8 @@ class HomePage extends StatelessWidget {
               // categoryController.fetchCategories();
               // menuController.fetchMenuItems();
               // restaurantController.fetchRestaurants();
-              menuController.fetchMenuSections(restaurantId: 1);
+              // menuController.fetchMenuSections(restaurantId: 1);
+              orderController.fetchUserOrders();
             },
             icon: const Icon(Icons.refresh),
           )

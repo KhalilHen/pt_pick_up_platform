@@ -208,4 +208,21 @@ class OrderController extends ChangeNotifier {
     currentRestaurantId = null;
     notifyListeners();
   }
+
+  Future<List<Order>> fetchUserOrders() async {
+    final getUser = await authController.getLoggedInUser();
+    if (getUser == null || getUser.isEmpty) {
+      throw Exception('User not found');
+    }
+
+    final respons = await supabase.from('order').select().eq('user_id', getUser);
+
+    if (respons == null || respons.isEmpty) {
+      return [];
+    } else {
+      print('Order response: $respons');
+      return (respons as List<dynamic>).map((data) => Order.fromMap(data as Map<String, dynamic>)).toList();
+      // return (respons as List<dynamic>).map((data) => Order.fromMap(data as Map<String, dynamic>)).toList();
+    }
+  }
 }
