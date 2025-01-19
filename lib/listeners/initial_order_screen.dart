@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:pt_pick_up_platform/listeners/order_listener.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
@@ -7,8 +7,13 @@ import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 
 class OrderInitialScreen extends StatefulWidget {
   final int orderId;
+  // final int restaurantId;
 
-  const OrderInitialScreen({Key? key, required this.orderId}) : super(key: key);
+  const OrderInitialScreen({
+    Key? key,
+    required this.orderId,
+    // required this.restaurantId
+  }) : super(key: key);
 
   @override
   State<OrderInitialScreen> createState() => _OrderInitialScreenState();
@@ -23,6 +28,7 @@ class _OrderInitialScreenState extends State<OrderInitialScreen> with TickerProv
   void initState() {
     super.initState();
     initializeAnimations();
+    setupStatusListener();
   }
 
   void initalizeAnimations() {
@@ -34,6 +40,42 @@ class _OrderInitialScreenState extends State<OrderInitialScreen> with TickerProv
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat();
+  }
+
+  void setupStatusListener() {
+    statusListener = OrderStatusListener(widget.orderId);
+
+    statusListener.startListening((status) {
+      if (status == OrderStatus.Cancelled) {
+        setState(() {
+          currentState = InitialOrderState.Cancelled;
+        });
+
+        // HapticFeedback.acmediumImpact();
+        // HapticFeedback.mediumImpact();
+        // navigateToCancelledScreen();
+      } else if (status == OrderStatus.Accepted) {
+        setState(() {
+          currentState = InitialOrderState.Accepted;
+        });
+
+        // HapticFeedback.mediumImpact();
+
+        navigateToOrderStatusScreen();
+      }
+    });
+  }
+
+  void navigateToOrderStatusScreen() {
+    Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => OrderStatusScreen(orderId: widget.orderId),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+              );
+            }));
   }
 
   @override
