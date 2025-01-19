@@ -387,9 +387,24 @@ class HomePage extends StatelessWidget {
         selectedItemColor: Colors.deepOrange,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
+        currentIndex: 0, // Set the current index
+        onTap: (index) {
+          if (index == 0) {
+            // Navigate to Home Page
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          } else if (index == 1) {
+            // Navigate to Orders Page
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const Orders()),
+            // );
+          }
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'Favorites'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
         ],
       ),

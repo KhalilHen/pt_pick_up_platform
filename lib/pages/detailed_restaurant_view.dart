@@ -55,18 +55,41 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                           ),
                         ),
                       )
-                    : Image.network(
-                        widget.restaurant.imgUrl ?? 'https://www.bartsboekje.com/wp-content/uploads/2020/06/riccardo-bergamini-O2yNzXdqOu0-unsplash-scaled.jpg',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
+                    : Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.network(
+                            widget.restaurant.imgUrl ?? '',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.transparent,
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
               ),
               title: Text(
                 widget.restaurant.name,
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.headlineLarge?.color,
-                  // fontWeight: FontWeight.bold,
+                  color: Colors.white, // Ensures contrast with the gradient.
+                  shadows: [
+                    Shadow(
+                      blurRadius: 4.0,
+                      color: Colors.black.withOpacity(0.6),
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -155,7 +178,7 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                                     margin: const EdgeInsets.only(right: 8),
                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[200],
+                                      color: Colors.grey[200], // Updated color to match homepage.dart
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(category.name),
