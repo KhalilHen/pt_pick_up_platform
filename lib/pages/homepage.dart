@@ -234,6 +234,7 @@ class HomePage extends StatelessWidget {
                         ),
                         FutureBuilder<List<Restaurant>>(
                           future: restaurantController.fetchRestaurants(),
+
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return const Center(child: CircularProgressIndicator());
@@ -244,6 +245,7 @@ class HomePage extends StatelessWidget {
                             }
 
                             final List<Restaurant> restaurant = snapshot.data!;
+                            // final restaurantId = restaurant[index];
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -264,6 +266,11 @@ class HomePage extends StatelessWidget {
                                   itemCount: restaurant.length,
                                   itemBuilder: (context, index) {
                                     final restaurantItem = restaurant[index];
+                            // final retrieveCategory = await categoryController.fetchRestaurantCategory(restaurantId: restaurantItem.id);
+                        // final retrieveCategory = await categoryController.fetchRestaurantCategory(restaurantId: restaurantItem.id); 
+                        final  restaurantId = restaurantItem.id;
+
+
                                     return GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -326,18 +333,32 @@ class HomePage extends StatelessWidget {
                                                         overflow: TextOverflow.ellipsis,
                                                       ),
                                                       Text(
-                                                        'Labels/tags',
-                                                        style: Theme.of(context).textTheme.bodyMedium,
-                                                      ),
+                                                        // restaurantItem.categories.toString(),
+                                                        '',
+                                                        style: Theme.of(context).textTheme.bodyMedium,                                                      ),
                                                       Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
-                                                          Icon(
-                                                            Icons.star,
-                                                            color: Colors.amber,
-                                                            size: 14,
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.star,
+                                                                color: Colors.amber,
+                                                                size: 14,
+                                                              ),
+                                                              Text(
+                                                                '${restaurantItem.rating.toStringAsFixed(1)}  ',
+                                                                style: const TextStyle(fontSize: 12),
+                                                              ),
+                                                            ],
                                                           ),
+
+                                                          // Text(
+                                                          //   '20min',
+                                                          //   style: const TextStyle(fontSize: 12),
+                                                          // ),
                                                           Text(
-                                                            '${restaurantItem.rating.toStringAsFixed(1)} · ${restaurantItem.reviewCount} reviews',
+                                                            '${restaurantItem.reviewCount} reviews',
                                                             style: const TextStyle(fontSize: 12),
                                                           ),
                                                         ],
