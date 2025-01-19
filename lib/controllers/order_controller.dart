@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
 import 'package:pt_pick_up_platform/custom/order_details.dart';
+import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 import 'package:pt_pick_up_platform/models/menu.dart';
 import 'package:pt_pick_up_platform/models/order.dart';
 import 'package:pt_pick_up_platform/models/order_items.dart';
 import '../main.dart';
-import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:pt_pick_up_platform/auth/auth_service.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class OrderController extends ChangeNotifier {
   Map<int, OrderItems> cartItems = {};
@@ -149,7 +148,7 @@ class OrderController extends ChangeNotifier {
       print('Order insert information:  $orderResponse');
 
       final orderId = orderResponse['id'];
-
+//  TODO Change this later into  a seperate function
       await supabase.from('order_items').insert(
             cartItems.values
                 .map((item) => {
@@ -161,6 +160,7 @@ class OrderController extends ChangeNotifier {
                     })
                 .toList(),
           );
+      await initializeFirebaseOrderStatus(orderResponse);
 
       final order = Order(
         id: orderId,
@@ -172,11 +172,33 @@ class OrderController extends ChangeNotifier {
       clearCart();
 
       print('Order created: $order');
+
+      // Navigator.pushNamed(context, OrderStatusScreen );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderStatusScreen(
+            orderId: order.id,
+          ),
+        ),
+      );
       return order;
     } catch (e) {
       throw Exception('Error: $e');
     }
     throw Exception('Order creation failed');
+  }
+
+  Future<void> initializeFirebaseOrderStatus(Map<String, dynamic> orderResponse) async {
+    final reference = FirebaseDatabase.instance.ref("order/${orderResponse['id']}");
+
+    await reference.set({
+      'order_id': orderResponse['id'],
+      'status': OrderStatus.Pending.name,
+      'total_amount': orderResponse['total_amount'],
+      'user_id': orderResponse['user_id'],
+      'restaurant_id': orderResponse['restaurant_id'],
+    });
   }
 
   void clearCart() {
