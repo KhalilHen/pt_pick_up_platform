@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pt_pick_up_platform/listeners/order_time_line.dart';
 import 'order_listener.dart';
 import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 
@@ -16,6 +17,9 @@ class OrderStatusScreen extends StatefulWidget {
 }
 
 class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProviderStateMixin {
+  late OrderStatusListener statusListener;
+
+  OrderStatus currentStatus = OrderStatus.Accepted;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +48,8 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
                   timeEstimate(),
                   const SizedBox(
                     height: 24,
-                  )
+                  ),
+                  OrderTimeLine(),
                 ],
               ),
             ),
@@ -128,3 +133,4 @@ Widget timeEstimate() {
     ),
   );
 }
+
