@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter/services.dart';
 import 'package:pt_pick_up_platform/listeners/order_listener.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
@@ -52,30 +53,28 @@ class _OrderInitialScreenState extends State<OrderInitialScreen> with TickerProv
         });
 
         // HapticFeedback.acmediumImpact();
-        // HapticFeedback.mediumImpact();
         // navigateToCancelledScreen();
       } else if (status == OrderStatus.Accepted) {
         setState(() {
           currentState = InitialOrderState.Accepted;
         });
-
-        // HapticFeedback.mediumImpact();
-
-        navigateToOrderStatusScreen();
+        HapticFeedback.mediumImpact();
+        ();
+        navigateToOrderStatus();
       }
     });
   }
 
-  void navigateToOrderStatusScreen() {
+  void navigateToOrderStatus() {
     Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => OrderStatusScreen(orderId: widget.orderId),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-              );
-            }));
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => OrderStatusScreen(orderId: widget.orderId),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    );
   }
 
   @override

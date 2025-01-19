@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter/services.dart';
 import 'package:pt_pick_up_platform/listeners/order_time_line.dart';
 import 'order_listener.dart';
@@ -64,6 +65,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
       print('Status Updated: $currentStatus');
       // HapticFeedback.Me();
       // HapticFeedback.acmediumImpact();
+      HapticFeedback.mediumImpact();
     }
   }
 
