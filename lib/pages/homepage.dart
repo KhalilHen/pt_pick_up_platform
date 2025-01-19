@@ -393,19 +393,19 @@ class HomePage extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OrderStatusScreen(
-                  // orderId: order.id,
-                  ),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) => OrderStatusScreen(
+      //             // orderId: order.id,
+      //             ),
+      //       ),
+      //     );
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }

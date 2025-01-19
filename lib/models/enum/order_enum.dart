@@ -12,5 +12,6 @@ enum CustomerOrderStatus {
 
   Confirmed,
   Preparing,
-  ReadyForPickUp
+  ReadyForPickUp,
+  Completed,
 }

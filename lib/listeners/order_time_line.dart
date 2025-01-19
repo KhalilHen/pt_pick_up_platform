@@ -92,8 +92,8 @@ class OrderTimeLine extends StatelessWidget {
       case CustomerOrderStatus.ReadyForPickUp:
         return "Your order is read for pick-up";
 
-      // case CustomerOrderStatus.:
-      //   return "Order Completed";
+      case CustomerOrderStatus.Completed:
+        return "Order Completed";
 
       default:
         return "Wen't something wrong";
@@ -102,15 +102,17 @@ class OrderTimeLine extends StatelessWidget {
 
   String getStatusDescription() {
     switch (status) {
-      case OrderStatus.Accepted:
+      case CustomerOrderStatus.Confirmed:
         return "Your order is confirmed";
 
-      case OrderStatus.Kitchen:
+      case CustomerOrderStatus.Preparing:
         return "Your order is being prepared";
 
-      case OrderStatus.ReadForPickUp:
+      case CustomerOrderStatus.ReadyForPickUp:
         return "Your order is ready to be picked up";
 
+      case CustomerOrderStatus.Completed:
+        return "Your order has been completed";
       default:
         return "Wen't something wrong";
     }

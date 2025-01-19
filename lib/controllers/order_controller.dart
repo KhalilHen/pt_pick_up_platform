@@ -174,14 +174,14 @@ class OrderController extends ChangeNotifier {
       print('Order created: $order');
 
       // Navigator.pushNamed(context, OrderStatusScreen );
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => OrderStatusScreen(
-      //       orderId: order.id,
-      //     ),
-      //   ),
-      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderStatusScreen(
+            orderId: order.id,
+          ),
+        ),
+      );
       return order;
     } catch (e) {
       throw Exception('Error: $e');
