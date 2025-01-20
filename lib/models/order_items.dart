@@ -31,6 +31,4 @@ class OrderItems {
       menuItem: MenuItem.fromMap(data['menu_item']),
     );
   }
-
-
 }

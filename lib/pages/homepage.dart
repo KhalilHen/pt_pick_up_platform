@@ -5,6 +5,7 @@ import 'package:pt_pick_up_platform/controllers/restaurant_controller.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
 import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
+import 'package:pt_pick_up_platform/pages/order_overview.dart';
 import '../models/category.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
 
@@ -399,10 +400,10 @@ class HomePage extends StatelessWidget {
             );
           } else if (index == 1) {
             // Navigate to Orders Page
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const Orders()),
-            // );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => OrdersPage()),
+            );
           }
         },
         items: const [
