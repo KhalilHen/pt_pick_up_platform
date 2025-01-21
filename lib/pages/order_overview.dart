@@ -19,7 +19,7 @@ class OrdersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO Improve the structure  
+    //TODO Improve the structure
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -189,6 +189,21 @@ class OrdersPage extends StatelessWidget {
                   );
                 },
               ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.deepOrange,
+        unselectedItemColor: Colors.grey[400],
+        type: BottomNavigationBarType.fixed,
+        currentIndex: 1,
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.of(context).pushReplacementNamed('/home');
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: "Orders"),
+        ],
       ),
     );
   }
