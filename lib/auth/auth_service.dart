@@ -58,4 +58,20 @@ class AuthService {
       return response;
     } catch (e) {}
   }
+
+  Future<bool> isEmailAvailable(String email) async {
+    try {
+      final response = await supabase.from('persons').select().match({'email': email}).maybeSingle();
+
+      return response == null;
+    } catch (e) {
+      print('Error: $e');
+      throw e;
+    }
+  }
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[a-zA-Z0-9_]{3,}$');
+    return emailRegex.hasMatch(email);
+  }
 }

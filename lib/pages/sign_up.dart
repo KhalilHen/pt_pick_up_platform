@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pt_pick_up_platform/auth/auth_service.dart';
+import 'dart:async';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -12,18 +13,58 @@ class _SignUpPageState extends State<SignUpPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
+  Timer? emailDebounce;
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
+
+  bool? isEmailAvailable;
   final authService = AuthService();
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    emailListener(emailController, checkEmailAvailability);
+  }
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+
+    emailDebounce?.cancel();
+
     super.dispose();
+  }
+
+  emailListener(TextEditingController emailController, Function(String) checkEmailAvailability) {
+    emailController.addListener(() {
+      if (emailDebounce?.isActive ?? false) emailDebounce?.cancel();
+      emailDebounce = Timer(const Duration(milliseconds: 2000), () {
+        final email = emailController.text;
+        if (authService.isValidEmail(email)) {
+          checkEmailAvailability(email);
+        } else {
+          setState(() {});
+        }
+        checkEmailAvailability(emailController.text);
+      });
+    });
+  }
+
+  Future<void> checkEmailAvailability(String email) async {
+    try {
+      final available = await authService.isEmailAvailable(email);
+      setState(() {
+        isEmailAvailable = available;
+      });
+    } catch (e) {
+      setState(() {
+        isEmailAvailable = false;
+      });
+      print(e);
+    }
   }
 
   @override
