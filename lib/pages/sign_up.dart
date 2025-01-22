@@ -158,7 +158,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                        onPressed: null,
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            authService.signUp(
+                              emailController.text,
+                              passwordController.text,
+                            );
+                            Navigator.pushReplacementNamed(context, '/login');
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepOrange,
                           foregroundColor: Colors.white,

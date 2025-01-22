@@ -37,6 +37,25 @@ class AuthService {
 
   Future<void> signOut() async {
     await supabase.auth.signOut();
-    
+  }
+
+  Future<AuthResponse?> signUp(String email, String password) async {
+    try {
+      final response = await supabase.auth.signUp(password: password, email: email);
+      if (response.user != null) {
+        final userId = response.user!.id;
+        final insertResponse = await supabase.from('persons').insert({
+          'id': userId,
+          'email': email,
+        });
+
+        if (insertResponse.error != null) {
+          throw Exception("database error: ${insertResponse.error!.message}");
+        }
+        print("User create");
+      }
+
+      return response;
+    } catch (e) {}
   }
 }
