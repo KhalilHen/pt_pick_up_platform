@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pt_pick_up_platform/auth/auth_service.dart';
 import 'package:pt_pick_up_platform/controllers/category_controller.dart';
 import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/controllers/restaurant_controller.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
 import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
-import 'package:pt_pick_up_platform/pages/login.dart';
 import 'package:pt_pick_up_platform/pages/order_overview.dart';
 import '../models/category.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
@@ -17,10 +15,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryController = CategoryController();
+    final menuController = MenuController1();
     final restaurantController = RestaurantController();
     final screenSize = MediaQuery.of(context).size;
+    final orderController = OrderController();
     final screenWidth = screenSize.width;
-    final authController = AuthService();
 
     final itemWidth = (screenSize.width / 2) - 24;
     final double titleFontSize = screenWidth < 350 ? 14 : 16;
@@ -44,13 +43,15 @@ class HomePage extends StatelessWidget {
             onPressed: () {},
           ),
           IconButton(
-              onPressed: () {
-                //TODO Fix that this isn't visibel when your not logged in
-                authController.signOut().then((value) {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginPage()));
-                });
-              },
-              icon: Icon(Icons.logout)),
+            onPressed: () {
+              // categoryController.fetchCategories();
+              // menuController.fetchMenuItems();
+              // restaurantController.fetchRestaurants();
+              // menuController.fetchMenuSections(restaurantId: 1);
+              orderController.fetchUserOrders();
+            },
+            icon: const Icon(Icons.refresh),
+          )
         ],
       ),
       body: SafeArea(

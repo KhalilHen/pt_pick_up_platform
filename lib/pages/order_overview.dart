@@ -196,7 +196,7 @@ class OrdersPage extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         currentIndex: 1,
         onTap: (index) {
-          if (index == 0) {
+          if (index == 0) { 
             Navigator.of(context).pushReplacementNamed('/home');
           }
         },

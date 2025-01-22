@@ -7,6 +7,7 @@ import 'package:pt_pick_up_platform/onboarding/pages/introduction.dart';
 import 'package:pt_pick_up_platform/onboarding/start_page.dart';
 import 'package:pt_pick_up_platform/pages/homepage.dart';
 import 'package:pt_pick_up_platform/pages/login.dart';
+import 'package:pt_pick_up_platform/pages/sign_up.dart';
 import 'package:pt_pick_up_platform/routes/routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-    
+
         // Primary text on light background
         textTheme: const TextTheme(
             headlineLarge: TextStyle(
@@ -68,11 +69,12 @@ class MyApp extends StatelessWidget {
             bodyMedium: TextStyle(color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold)),
       ),
       debugShowCheckedModeBanner: false,
-    
+
       // home: const AuthGate(),
       // home: Introduction(),
       // home: Introduction(), //Easier for making the homepage
-      home: AuthGate(),
+      // home: AuthGate(),
+      home: SignUpPage(),
       // home: OrderStatusScreen(),
       // home: LoginPage(),
       routes: {
