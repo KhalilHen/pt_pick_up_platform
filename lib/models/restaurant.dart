@@ -40,6 +40,4 @@ class Restaurant {
       // .toList(),
     );
   }
-
- 
 }

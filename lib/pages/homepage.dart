@@ -5,6 +5,7 @@ import 'package:pt_pick_up_platform/controllers/restaurant_controller.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
 import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
+import 'package:pt_pick_up_platform/pages/detail_menu_item.dart';
 import 'package:pt_pick_up_platform/pages/order_overview.dart';
 import '../models/category.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
@@ -411,22 +412,15 @@ class HomePage extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => OrderStatusScreen(
-      //             // orderId: order.id,
-      //             ),
-      //       ),
-      //     );
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: null,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
+
+
 
 Widget buildCategory({required restaurantId}) {
   return FutureBuilder<List<Category>>(

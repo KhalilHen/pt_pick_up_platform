@@ -215,14 +215,15 @@ class OrderController extends ChangeNotifier {
       throw Exception('User not found');
     }
 
-    final respons = await supabase.from('order').select().eq('user_id', getUser);
+    final response = await supabase.from('order').select('*, restaurant:restaurant(id, name, image_url)').eq('user_id', getUser);
 
-    if (respons == null || respons.isEmpty) {
+    if (response == null || response.isEmpty) {
+      print('No orders found');
       return [];
     } else {
-      print('Order response: $respons');
-      return (respons as List<dynamic>).map((data) => Order.fromMap(data as Map<String, dynamic>)).toList();
-      // return (respons as List<dynamic>).map((data) => Order.fromMap(data as Map<String, dynamic>)).toList();
+      print('Order response: $response');
+
+      return (response as List).map((data) => Order.fromMap(data as Map<String, dynamic>)).toList();
     }
   }
 }
