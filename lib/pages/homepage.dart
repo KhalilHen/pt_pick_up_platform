@@ -4,8 +4,9 @@ import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/controllers/restaurant_controller.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
-import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
 import 'package:pt_pick_up_platform/pages/detail_menu_item.dart';
+import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
+// import 'package:pt_pick_up_platform/pages/detail_menu_item.dart';
 import 'package:pt_pick_up_platform/pages/order_overview.dart';
 import '../models/category.dart';
 import 'package:pt_pick_up_platform/controllers/menu_controller.dart';
@@ -413,14 +414,27 @@ class HomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          showMenuItemDetails(context);
+        },
         child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-
+void showMenuItemDetails(
+  BuildContext context,
+) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => MenuItemBottomSheet(),
+  );
+}
 
 Widget buildCategory({required restaurantId}) {
   return FutureBuilder<List<Category>>(
