@@ -24,6 +24,8 @@ class RestaurantDetailPage extends StatefulWidget {
 
 class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
   @override
+
+
   Widget build(BuildContext context) {
     // final customWidgets = customMenuWidgets(orderController: Provider.of<OrderController>(context));
     // final customWidgets = customMenuWidgets(orderController: orderController);

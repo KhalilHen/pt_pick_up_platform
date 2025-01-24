@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pt_pick_up_platform/controllers/order_controller.dart';
+import 'package:pt_pick_up_platform/models/menu.dart';
 
 class MenuItemBottomSheet extends StatefulWidget {
+  final MenuItem menuItem;
+
   const MenuItemBottomSheet({
     Key? key,
+    required this.menuItem,
   }) : super(key: key);
 
   @override
@@ -12,8 +16,12 @@ class MenuItemBottomSheet extends StatefulWidget {
 }
 
 class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
+  int _quantity = 0;
+
   @override
   Widget build(BuildContext context) {
+    final orderController = Provider.of<OrderController>(context);
+
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
       minChildSize: 0.5,
@@ -52,17 +60,17 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
                     const SizedBox(height: 16),
                     Center(
                       child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                            width: 200,
-                            height: 200,
-                            color: Colors.grey[300],
-                            child: const Icon(
-                              Icons.image,
-                              size: 100,
-                              color: Colors.grey,
-                            ),
-                          )),
+                        borderRadius: BorderRadius.circular(15),
+                        child: widget.menuItem.imageUrl != null && widget.menuItem.imageUrl!.isNotEmpty
+                            ? Image.network(
+                                widget.menuItem.imageUrl!,
+                                width: 200,
+                                height: 200,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => _defaultImage(),
+                              )
+                            : _defaultImage(),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -70,14 +78,14 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
                       children: [
                         Expanded(
                           child: Text(
-                            'name',
+                            widget.menuItem.name,
                             style: Theme.of(context).textTheme.headlineMedium,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Text(
-                          '€3',
+                          '€${widget.menuItem.price.toStringAsFixed(2)}',
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 color: Colors.deepOrange,
                               ),
@@ -86,7 +94,7 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'description',
+                      widget.menuItem.description ?? 'No description available',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Colors.grey[700],
                           ),
@@ -108,39 +116,18 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
                             children: [
                               IconButton(
                                 icon: const Icon(Icons.remove),
-                                onPressed: null,
+                                onPressed: _quantity > 0 ? () => setState(() => _quantity--) : null,
                               ),
                               Text(
-                                '0',
+                                '$_quantity',
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                               IconButton(
                                 icon: const Icon(Icons.add),
-                                onPressed: null,
+                                onPressed: () => setState(() => _quantity++),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Allergens',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 4,
-                          children: [
-                            Chip(
-                              label: Text('Gluten Free'),
-                              backgroundColor: Colors.red[100],
-                            ),
-                          ],
                         ),
                       ],
                     ),
@@ -153,11 +140,17 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: null,
-                      child: Text(
-                        'Add to cart ',
-                        style: const TextStyle(
+                      onPressed: _quantity > 0
+                          ? () {
+                              orderController.addToCard(id: widget.menuItem.id, quantity: _quantity, item: widget.menuItem);
+                              Navigator.pop(context);
+                            }
+                          : null,
+                      child: const Text(
+                        'Add to cart',
+                        style: TextStyle(
                           fontSize: 16,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -169,6 +162,19 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
           ),
         );
       },
+    );
+  }
+
+  Widget _defaultImage() {
+    return Container(
+      width: 200,
+      height: 200,
+      color: Colors.grey[300],
+      child: const Icon(
+        Icons.image,
+        size: 100,
+        color: Colors.grey,
+      ),
     );
   }
 }

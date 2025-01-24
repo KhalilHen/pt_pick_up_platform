@@ -413,28 +413,28 @@ class HomePage extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showMenuItemDetails(context);
-        },
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     showMenuItemDetails(context);
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }
 
-void showMenuItemDetails(
-  BuildContext context,
-) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (_) => MenuItemBottomSheet(),
-  );
-}
+// void showMenuItemDetails(
+//   BuildContext context,
+// ) {
+//   showModalBottomSheet(
+//     context: context,
+//     isScrollControlled: true,
+//     shape: const RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+//     ),
+//     builder: (_) => MenuItemBottomSheet( menuItem: ,),
+//   );
+// }
 
 Widget buildCategory({required restaurantId}) {
   return FutureBuilder<List<Category>>(
