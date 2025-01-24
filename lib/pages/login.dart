@@ -72,8 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
-                      }
-                      else if (!value.contains('@')) {
+                      } else if (!value.contains('@')) {
                         return 'Please enter a valid email';
                       }
                       return null;
@@ -119,9 +118,9 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: null,
-                      child:  const Text(
+                      child: const Text(
                         'Forgot Password?',
-                        style:  TextStyle(
+                        style: TextStyle(
                           color: Colors.deepOrange,
                           fontWeight: FontWeight.bold,
                         ),
@@ -135,9 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState?.validate() ?? false) {
-                          authService.checkUser(
-                            emailController.text, passwordController.text, formKey
-                          );
+                          authService.checkUser(emailController.text, passwordController.text, formKey);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -167,7 +164,9 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(color: Colors.grey[600]),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/signup');
+                        },
                         child: const Text(
                           'Sign Up',
                           style: TextStyle(

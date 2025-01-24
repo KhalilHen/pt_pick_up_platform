@@ -135,19 +135,118 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   if (isSearching)
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: filteredRestaurants.length,
-                      itemBuilder: (context, index) {
-                        final restaurant = filteredRestaurants[index];
-                        return ListTile(
-                          title: Text(restaurant.name ?? 'Restaurant Name'),
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantDetailPage(restaurant: restaurant)));
-                          },
-                        );
-                      },
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: screenSize.width < 340 ? 1 : 2,
+                              childAspectRatio: 0.8, // Slightly increased height
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                            ),
+                            itemCount: filteredRestaurants.length,
+                            itemBuilder: (context, index) {
+                              final restaurantItem = filteredRestaurants[index];
+                              final restaurantId = restaurantItem.id;
+
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantDetailPage(restaurant: restaurantItem)));
+                                },
+                                child: Hero(
+                                  tag: 'restaurant-${restaurantItem.id}',
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(16), // Slightly more rounded corners
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withAlpha(50), // Slightly more prominent shadow
+                                          spreadRadius: 1,
+                                          blurRadius: 10,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[300],
+                                              borderRadius: const BorderRadius.vertical(
+                                                top: Radius.circular(16), // Matching container's border radius
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: restaurantItem.imgUrl == null || restaurantItem.imgUrl!.isEmpty
+                                                  ? const Icon(
+                                                      Icons.image,
+                                                      size: 40,
+                                                      color: Colors.grey,
+                                                    )
+                                                  : Image.network(
+                                                      restaurantItem.imgUrl!,
+                                                      fit: BoxFit.cover,
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0), // Increased padding
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(restaurantItem.name ?? 'Restaurant Name', style: Theme.of(context).textTheme.headlineMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
+                                                buildCategory(restaurantId: restaurantId),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        const Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                          size: 14,
+                                                        ),
+                                                        Text(
+                                                          '${restaurantItem.rating.toStringAsFixed(1)}  ',
+                                                          style: const TextStyle(fontSize: 12),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Text(
+                                                      '${restaurantItem.reviewCount} reviews',
+                                                      style: const TextStyle(fontSize: 12),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     )
                   else
                     Padding(
