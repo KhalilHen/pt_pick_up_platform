@@ -16,7 +16,17 @@ class MenuItemBottomSheet extends StatefulWidget {
 }
 
 class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
-  int _quantity = 0;
+  int quantity = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    //This listen for the quanity value
+    final orderController = Provider.of<OrderController>(context, listen: false);
+    if (orderController.cartItems.containsKey(widget.menuItem.id)) {
+      quantity = orderController.cartItems[widget.menuItem.id]!.quantity;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,123 +49,134 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
               ),
             ],
           ),
-          child: ListView(
-            controller: controller,
+          child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: const EdgeInsets.only(bottom: 80),
+                child: ListView(
+                  controller: controller,
                   children: [
-                    Center(
-                      child: Container(
-                        width: 50,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: widget.menuItem.imageUrl != null && widget.menuItem.imageUrl!.isNotEmpty
-                            ? Image.network(
-                                widget.menuItem.imageUrl!,
-                                width: 200,
-                                height: 200,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => _defaultImage(),
-                              )
-                            : _defaultImage(),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            widget.menuItem.name,
-                            style: Theme.of(context).textTheme.headlineMedium,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Text(
-                          '€${widget.menuItem.price.toStringAsFixed(2)}',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: Colors.deepOrange,
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Container(
+                              width: 50,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      widget.menuItem.description ?? 'No description available',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[700],
+                            ),
                           ),
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Quantity',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(20),
+                          const SizedBox(height: 16),
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: widget.menuItem.imageUrl != null && widget.menuItem.imageUrl!.isNotEmpty
+                                  ? Image.network(
+                                      widget.menuItem.imageUrl!,
+                                      width: 200,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => defaultImage(),
+                                    )
+                                  : defaultImage(),
+                            ),
                           ),
-                          child: Row(
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: _quantity > 0 ? () => setState(() => _quantity--) : null,
+                              Expanded(
+                                child: Text(
+                                  widget.menuItem.name,
+                                  style: Theme.of(context).textTheme.headlineMedium,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               Text(
-                                '$_quantity',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () => setState(() => _quantity++),
+                                '€${widget.menuItem.price.toStringAsFixed(2)}',
+                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                      color: Colors.deepOrange,
+                                    ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
-                        minimumSize: const Size.fromHeight(50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: _quantity > 0
-                          ? () {
-                              orderController.addToCard(id: widget.menuItem.id, quantity: _quantity, item: widget.menuItem);
-                              Navigator.pop(context);
-                            }
-                          : null,
-                      child: const Text(
-                        'Add to cart',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                          const SizedBox(height: 16),
+                          Text(
+                            widget.menuItem.description ?? 'No description available',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Colors.grey[700],
+                                ),
+                          ),
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Quantity',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.remove),
+                                      onPressed: quantity > 0 ? () => setState(() => quantity--) : null,
+                                    ),
+                                    Text(
+                                      '$quantity',
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.add),
+                                      onPressed: () => setState(() => quantity++),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ],
+                ),
+              ),
+              Positioned(
+                bottom: 16,
+                left: 16,
+                right: 16,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                    minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: quantity > 0
+                      ? () {
+                          orderController.addToCard(id: widget.menuItem.id, quantity: quantity, item: widget.menuItem);
+                          Navigator.pop(context);
+                        }
+                      : null,
+                  child: const Text(
+                    'Add to cart',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -165,7 +186,7 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
     );
   }
 
-  Widget _defaultImage() {
+  Widget defaultImage() {
     return Container(
       width: 200,
       height: 200,

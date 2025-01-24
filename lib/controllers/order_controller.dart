@@ -186,9 +186,9 @@ class OrderController extends ChangeNotifier {
       );
       return order;
     } catch (e) {
-      throw Exception('Error: $e');
+      throw Exception('Order creation failed');
+
     }
-    throw Exception('Order creation failed');
   }
 
   Future<void> initializeFirebaseOrderStatus(Map<String, dynamic> orderResponse) async {
