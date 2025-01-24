@@ -33,7 +33,7 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
     final orderController = Provider.of<OrderController>(context);
 
     return DraggableScrollableSheet(
-      initialChildSize: 0.7,
+      initialChildSize: 0.6,
       minChildSize: 0.5,
       maxChildSize: 0.9,
       builder: (_, controller) {
@@ -177,6 +177,7 @@ class _MenuItemBottomSheetState extends State<MenuItemBottomSheet> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  //test
                 ),
               ),
             ],
