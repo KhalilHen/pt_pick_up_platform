@@ -4,40 +4,52 @@ class Restaurant {
   final int id;
   final String name;
   final String description;
-  // final String? address;
   final double rating;
   final int reviewCount;
   final String? imgUrl;
-  // final List<Category>? categories;ttt
-  // final List<MenuSection>? menuSections;
 
   Restaurant({
     required this.id,
     required this.name,
     required this.description,
-    // required this.address,
-    // required this.phone_number,
     required this.rating,
     required this.reviewCount,
-    // required this.categories,
-    // required this.menuSections,
-    required this.imgUrl,
-    //  required this.menuSections
+    this.imgUrl,
   });
 
   factory Restaurant.fromMap(Map<String, dynamic> data) {
     return Restaurant(
-      id: data['id'],
-      name: data['name'],
-      description: data['description'],
-      // address: data['address'],
-      imgUrl: data['image_url'],
-      // phone_number: data['phone_number'], //Maby later
-      rating: data['rating'],
-      reviewCount: data['review_count'],
-      //  menuSections: (data['menu_sections'] as List)
-      // .map((e) => MenuSection.fromMap(e as Map<String, dynamic>))
-      // .toList(),
+      id: _parseId(data['id']),
+      name: _parseName(data['name']),
+      description: _parseDescription(data['description']),
+      imgUrl: data['image_url']?.toString(),
+      rating: _parseRating(data['rating']),
+      reviewCount: _parseReviewCount(data['review_count']),
     );
+  }
+
+  static int _parseId(dynamic value) {
+    if (value == null) return 0;
+    return value is int ? value : int.tryParse(value.toString()) ?? 0;
+  }
+
+  static String _parseName(dynamic value) {
+    if (value == null) return 'Unknown Restaurant';
+    return value.toString().trim().isEmpty ? 'Unknown Restaurant' : value.toString();
+  }
+
+  static String _parseDescription(dynamic value) {
+    if (value == null) return 'No description available';
+    return value.toString().trim().isEmpty ? 'No description available' : value.toString();
+  }
+
+  static double _parseRating(dynamic value) {
+    if (value == null) return 0.0;
+    return value is double ? value : double.tryParse(value.toString()) ?? 0.0;
+  }
+
+  static int _parseReviewCount(dynamic value) {
+    if (value == null) return 0;
+    return value is int ? value : int.tryParse(value.toString()) ?? 0;
   }
 }

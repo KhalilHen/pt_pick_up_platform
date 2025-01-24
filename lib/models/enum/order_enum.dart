@@ -4,7 +4,7 @@ enum OrderStatus {
   Rejected,
   Kitchen,
   Cancelled,
-  ReadForPickUp,
+  ReadyForPickUp,
   Completed,
 }
 
@@ -15,8 +15,4 @@ enum CustomerOrderStatus {
   Completed,
 }
 
-enum InitialOrderState { 
-  Pending, 
-  Accepted, 
-  Cancelled 
-  }
+enum InitialOrderState { Pending, Accepted, Cancelled }

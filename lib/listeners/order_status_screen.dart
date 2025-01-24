@@ -43,7 +43,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
 
             break;
 
-          case OrderStatus.ReadForPickUp:
+          case OrderStatus.ReadyForPickUp:
             updateStatus(CustomerOrderStatus.ReadyForPickUp);
             break;
 
