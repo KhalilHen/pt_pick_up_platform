@@ -6,6 +6,7 @@ enum OrderStatus {
   Cancelled,
   ReadyForPickUp,
   Completed,
+  Unknown,
 }
 
 enum CustomerOrderStatus {

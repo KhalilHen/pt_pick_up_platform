@@ -62,8 +62,7 @@ class Order {
         return OrderStatus.Accepted;
       case 'kitchen':
         return OrderStatus.Kitchen;
-      case 'ready':
-      case 'readyforpickup':
+      case 'ready_to_pick_up':
         return OrderStatus.ReadyForPickUp;
       case 'completed':
         return OrderStatus.Completed;
@@ -72,7 +71,7 @@ class Order {
       case 'rejected':
         return OrderStatus.Rejected;
       default:
-        return OrderStatus.Pending;
+        return OrderStatus.Unknown;
     }
   }
 }
