@@ -613,21 +613,23 @@ class _HomePageState extends State<HomePage> {
 // }
 
 Widget buildCategory({required restaurantId}) {
-  return FutureBuilder<List<Category>>(
-      future: CategoryController().fetchRestaurantCategory(restaurantId: restaurantId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return Text('There was an error');
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text(
-            "  No category's available for this restaurant",
-            overflow: TextOverflow.ellipsis,
-          );
-        } else {
+  return LayoutBuilder(builder: (context, constraints) {
+    return FutureBuilder<List<Category>>(
+        future: CategoryController().fetchRestaurantCategory(restaurantId: restaurantId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Text('There was an error');
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const SizedBox.shrink();
+          }
           final categories = snapshot.data!;
+          if (constraints.maxWidth < 200) {
+            return const SizedBox.shrink();
+          }
+
           return Wrap(
             spacing: 8,
             runSpacing: 4,
@@ -646,6 +648,6 @@ Widget buildCategory({required restaurantId}) {
               );
             }).toList(),
           );
-        }
-      });
+        });
+  });
 }
