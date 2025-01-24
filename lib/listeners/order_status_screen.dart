@@ -97,7 +97,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
       appBar: AppBar(
         backgroundColor: Colors.deepOrange,
         title: Text(
-          'Order #10}',
+          'Order Status',
           style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
         elevation: 0,
@@ -139,6 +139,10 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
     );
   }
 
+  String getStatusTitle() {
+    return OrderTimeLine(status: currentStatus).getStatusTitle();
+  }
+
   Widget StatusHeader() {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -157,15 +161,16 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
             height: 16,
           ),
           Text(
-            'Order Confirmed',
+            getStatusTitle(),
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.deepOrange),
             textAlign: TextAlign.center,
           ),
           const SizedBox(
             height: 16,
           ),
+          //TODO
           Text(
-            'Your order has been confirmed and is being prepared',
+            getStatusTitle(),
             style: const TextStyle(fontSize: 16, color: Colors.black87),
             textAlign: TextAlign.center,
           ),
