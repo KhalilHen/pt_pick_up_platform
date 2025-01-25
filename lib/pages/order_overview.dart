@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart ';
 
 import 'package:provider/provider.dart  ';
+import 'package:pt_pick_up_platform/auth/auth_provider.dart';
 import 'package:pt_pick_up_platform/controllers/order_controller.dart';
+import 'package:pt_pick_up_platform/custom/order_details.dart';
+import 'package:pt_pick_up_platform/listeners/initial_order_screen.dart';
+import 'package:pt_pick_up_platform/listeners/order_time_line.dart';
 import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 import 'package:pt_pick_up_platform/models/menu.dart';
 import 'package:pt_pick_up_platform/models/order.dart';
-import 'package:intl/intl.dart'; // Add this import
+import 'package:intl/intl.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -28,6 +32,92 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    if (!authProvider.isLoggedIn) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.deepOrange,
+          title: Text(
+            'My Orders',
+            style: Theme.of(context).appBarTheme.titleTextStyle,
+          ),
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.lock_outline,
+                  size: 80,
+                  color: Colors.deepOrange,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Login Required',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'You need to be logged in to view your order history',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.normal,
+                      ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepOrange,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Go to Login',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.deepOrange,
+          unselectedItemColor: Colors.grey[400],
+          type: BottomNavigationBarType.fixed,
+          currentIndex: 1,
+          onTap: (index) {
+            if (index == 0) {
+              Navigator.of(context).pushReplacementNamed('/home');
+            }
+            if (index == 2) {
+              Navigator.of(context).pushReplacementNamed('/account');
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account')
+          ],
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -78,6 +168,27 @@ class _OrdersPageState extends State<OrdersPage> {
                   ),
                 );
               }
+              //  else if (authProvider.isLoggedIn == false) {
+              //   return Center(
+              //     child: Column(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Icon(
+              //           Icons.error_outline,
+              //           size: 64,
+              //           color: Colors.grey[400],
+              //         ),
+              //         const SizedBox(
+              //           height: 16,
+              //         ),
+              //         Text(
+              //           "You need to be logged in to view your order history",
+              //           style: TextStyle(fontSize: 18, color: Colors.grey[500]),
+              //         ),
+              //       ],
+              //     ),
+              //   );
+              // }
 
               return ListView.builder(
                   padding: const EdgeInsets.all(16),
@@ -99,10 +210,14 @@ class _OrdersPageState extends State<OrdersPage> {
           if (index == 0) {
             Navigator.of(context).pushReplacementNamed('/home');
           }
+          if (index == 2) {
+            Navigator.of(context).pushReplacementNamed('/account');
+          }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account')
         ],
       ),
     );
@@ -228,6 +343,7 @@ class _OrdersPageState extends State<OrdersPage> {
           ),
           InkWell(
             onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => OrderInitialScreen(orderId: order.id)));
               // Navigate to order details
             },
             child: Container(

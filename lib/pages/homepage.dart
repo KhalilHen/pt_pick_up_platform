@@ -584,12 +584,9 @@ class _HomePageState extends State<HomePage> {
             );
           } else if (index == 1) {
             // Navigate to Orders Page
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => OrdersPage()),
-            );
+            Navigator.of(context).pushReplacementNamed('/order-overview');
           } else if (index == 2) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AccountPage()));
+            Navigator.of(context).pushReplacementNamed('/account');
           }
         },
         items: const [

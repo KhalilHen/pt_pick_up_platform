@@ -219,7 +219,9 @@ class OrderController extends ChangeNotifier {
   Future<List<Order>> fetchUserOrders() async {
     final getUser = await authController.getLoggedInUser();
     if (getUser == null || getUser.isEmpty) {
-      throw Exception('User not found');
+      // **  Maby add here the return widget  when user is not logged in.
+
+      return [];
     }
 
     final response = await supabase.from('order').select('*, order_items(*, menu_items:menu_item_id(*)), restaurant:restaurant_id(*)').eq('user_id', getUser);
@@ -228,7 +230,6 @@ class OrderController extends ChangeNotifier {
       print('No orders found');
       return [];
     } else {
-
       return (response as List).map((data) => Order.fromMap(data as Map<String, dynamic>)).toList();
     }
   }
