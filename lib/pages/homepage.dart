@@ -4,6 +4,7 @@ import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/controllers/restaurant_controller.dart';
 import 'package:pt_pick_up_platform/listeners/order_status_screen.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
+import 'package:pt_pick_up_platform/pages/account_page.dart';
 import 'package:pt_pick_up_platform/pages/detail_menu_item.dart';
 import 'package:pt_pick_up_platform/pages/detailed_restaurant_view.dart';
 import 'package:pt_pick_up_platform/pages/order_overview.dart';
@@ -85,10 +86,6 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.person_outline),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
             onPressed: () {},
           ),
         ],
@@ -575,11 +572,14 @@ class _HomePageState extends State<HomePage> {
               context,
               MaterialPageRoute(builder: (context) => OrdersPage()),
             );
+          } else if (index == 2) {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AccountPage()));
           }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account')
         ],
       ),
       // floatingActionButton: FloatingActionButton(
