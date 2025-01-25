@@ -1,7 +1,7 @@
-# PT Pick Up Platform
+#  Pick Up Platform
 
 ## Overview
-PT Pick Up Platform is a mobile application for customers to order there favorite food at different restaurants. With this app, users can seamlessly browse restaurants, place orders, track order status, and manage their order history.
+Pick Up Platform is a mobile application for customers to order there favorite food at different restaurants. With this app, users can seamlessly browse restaurants, place orders, track order status, and manage their order history.
 
 ## Key Features
 - 🍽️ **Multi-Restaurant Ordering**
