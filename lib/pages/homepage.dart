@@ -66,6 +66,24 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> filterRestaurantsByCategory(int categoryId) async {
+    try {
+      final restaurantController = RestaurantController();
+      final allRestaurants = await restaurantController.fetchRestaurants();
+
+      final filterdList = await Future.wait(allRestaurants.map((restaurant) async {
+        final restaurantCategories = await CategoryController().fetchRestaurantCategory(restaurantId: restaurant.id);
+
+        return restaurantCategories.any((cat) => cat.id == categoryId) ? restaurant : null;
+      })).then((list) => list.whereType<Restaurant>().toList());
+
+      setState(() {
+        isSearching = true;
+        this.filteredRestaurants = filterdList;
+      });
+    } catch (e) {}
+  }
+
   Widget build(BuildContext context) {
 // final authProvider = Provider.of<AuthProvider>(context);
 
@@ -277,7 +295,6 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 100,
                             child: FutureBuilder<List>(
-                                // stream: null,
                                 future: categoryController.fetchCategories(),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -296,29 +313,32 @@ class _HomePageState extends State<HomePage> {
                                     itemBuilder: (context, index) {
                                       final category = categories[index];
                                       // print(category.name);
-                                      return Container(
-                                        width: 90,
-                                        margin: const EdgeInsets.only(right: 12),
-                                        decoration: BoxDecoration(
-                                          color: Colors.deepOrange.withAlpha(25),
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(category.icon, color: Colors.deepOrange, size: 28),
-                                            // Text(category.iconName),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Text(
-                                              category.name ?? 'Category name',
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
+                                      return GestureDetector(
+                                        onTap: () => filterRestaurantsByCategory(category.id),
+                                        child: Container(
+                                          width: 90,
+                                          margin: const EdgeInsets.only(right: 12),
+                                          decoration: BoxDecoration(
+                                            color: Colors.deepOrange.withAlpha(25),
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(category.icon, color: Colors.deepOrange, size: 28),
+                                              // Text(category.iconName),
+                                              SizedBox(
+                                                height: 8,
                                               ),
-                                            )
-                                          ],
+                                              Text(
+                                                category.name ?? 'Category name',
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       );
                                     },
