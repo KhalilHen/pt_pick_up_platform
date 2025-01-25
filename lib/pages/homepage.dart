@@ -28,12 +28,37 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController searchController = TextEditingController();
   List<Restaurant> filteredRestaurants = [];
   bool isSearching = false;
+  int? selectedCategoryId;
+  bool isCategoryFilterd = true;
+  // bool isLoading = true;
+
+  List<Restaurant> allRestaurants = [];
 
   Timer? searchDebounceTimer;
+
+  Future<void> filterRestaurantsByCategory(int categoryId) async {
+    setState(() {
+      selectedCategoryId = selectedCategoryId == categoryId ? null : categoryId;
+    });
+  }
+
+  void resetCategoryFilter() {
+    setState(() {
+      selectedCategoryId = null;
+    });
+  }
+
+  Future<void> resetRestaurantFilter() async {
+    setState(() {
+      selectedCategoryId = null;
+      isCategoryFilterd = false;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+
     searchController.addListener(onSearchChange);
   }
 
@@ -66,23 +91,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> filterRestaurantsByCategory(int categoryId) async {
-    try {
-      final restaurantController = RestaurantController();
-      final allRestaurants = await restaurantController.fetchRestaurants();
-
-      final filterdList = await Future.wait(allRestaurants.map((restaurant) async {
-        final restaurantCategories = await CategoryController().fetchRestaurantCategory(restaurantId: restaurant.id);
-
-        return restaurantCategories.any((cat) => cat.id == categoryId) ? restaurant : null;
-      })).then((list) => list.whereType<Restaurant>().toList());
-
-      setState(() {
-        isSearching = true;
-        this.filteredRestaurants = filterdList;
-      });
-    } catch (e) {}
-  }
+  // void resetFilter() {
+  //   setState(() {
+  //     filteredRestaurants = allRestaurants;
+  //     selectedCategoryId = null;
+  //   });
+  // }
 
   Widget build(BuildContext context) {
 // final authProvider = Provider.of<AuthProvider>(context);
@@ -345,138 +359,146 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 }),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Popular',
-                                  style: Theme.of(context).textTheme.headlineLarge,
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                FutureBuilder<List<Restaurant>>(
-                                    future: restaurantController.retrievePopularRestaurants(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState == ConnectionState.waiting) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        return const Text("There was an error");
-                                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                        return const Text('No data fond');
-                                      }
+                          if (selectedCategoryId != null)
+                            //** To remove  the popular tag */
+                            // const SizedBox.shrink()
 
-                                      //         FutureBuilder<List<Restaurant>>(
-                                      // future: restaurantController.fetchRestaurants(),
-                                      // builder: (context, snapshot) {
-                                      //   if (snapshot.connectionState == ConnectionState.waiting) {
-                                      //     return const Center(child: CircularProgressIndicator());
-                                      //   } else if (snapshot.hasError) {
-                                      //     return const Text('There was an error');
-                                      //   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                      //     return const Text('No data found');
-                                      //   }
+                            Padding(padding: EdgeInsets.only(top: 50), child: Text('All restaurants with the selected category'))
+                          else
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Popular',
+                                    style: Theme.of(context).textTheme.headlineLarge,
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  FutureBuilder<List<Restaurant>>(
+                                      future: restaurantController.retrievePopularRestaurants(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return const Text("There was an error");
+                                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                          return const Text('No data fond');
+                                        }
 
-                                      final List<Restaurant> popularRestaurants = snapshot.data!;
+                                        //         FutureBuilder<List<Restaurant>>(
+                                        // future: restaurantController.fetchRestaurants(),
+                                        // builder: (context, snapshot) {
+                                        //   if (snapshot.connectionState == ConnectionState.waiting) {
+                                        //     return const Center(child: CircularProgressIndicator());
+                                        //   } else if (snapshot.hasError) {
+                                        //     return const Text('There was an error');
+                                        //   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                        //     return const Text('No data found');
+                                        //   }
 
-                                      return SizedBox(
-                                        height: itemHeight, // Limit the height to fit one row
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: popularRestaurants.length,
-                                          itemBuilder: (context, index) {
-                                            final restaurantItem = popularRestaurants[index];
-                                            final restaurantId = restaurantItem.id;
-                                            return Container(
-                                              width: itemWidth, // Set the width for each item
-                                              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.deepOrange.withAlpha(25),
-                                                borderRadius: BorderRadius.circular(12),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.withAlpha(25),
-                                                    spreadRadius: 1,
-                                                    blurRadius: 10,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    flex: 3,
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.grey[300],
-                                                        borderRadius: const BorderRadius.vertical(
-                                                          top: Radius.circular(12),
+                                        final List<Restaurant> popularRestaurants = snapshot.data!;
+
+                                        return SizedBox(
+                                          height: itemHeight, // Limit the height to fit one row
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: popularRestaurants.length,
+                                            itemBuilder: (context, index) {
+                                              final restaurantItem = popularRestaurants[index];
+                                              final restaurantId = restaurantItem.id;
+                                              return Container(
+                                                width: itemWidth, // Set the width for each item
+                                                margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.deepOrange.withAlpha(25),
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withAlpha(25),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 10,
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 3,
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.grey[300],
+                                                          borderRadius: const BorderRadius.vertical(
+                                                            top: Radius.circular(12),
+                                                          ),
+                                                        ),
+                                                        child: Center(
+                                                          child: restaurantItem.imgUrl == null || restaurantItem.imgUrl!.isEmpty
+                                                              ? const Icon(
+                                                                  Icons.image,
+                                                                  size: 40,
+                                                                  color: Colors.grey,
+                                                                )
+                                                              : Image.network(
+                                                                  restaurantItem.imgUrl!,
+                                                                  fit: BoxFit.cover,
+                                                                  width: double.infinity,
+                                                                  height: double.infinity,
+                                                                ),
+                                                          //  Icon(Icons.image, size: 40, color: Colors.grey),
                                                         ),
                                                       ),
-                                                      child: Center(
-                                                        child: restaurantItem.imgUrl == null || restaurantItem.imgUrl!.isEmpty
-                                                            ? const Icon(
-                                                                Icons.image,
-                                                                size: 40,
-                                                                color: Colors.grey,
-                                                              )
-                                                            : Image.network(
-                                                                restaurantItem.imgUrl!,
-                                                                fit: BoxFit.cover,
-                                                                width: double.infinity,
-                                                                height: double.infinity,
-                                                              ),
-                                                        //  Icon(Icons.image, size: 40, color: Colors.grey),
-                                                      ),
                                                     ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 2,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            restaurantItem.name ?? "Unknown Restaurant",
-                                                            style: TextStyle(
-                                                              fontSize: titleFontSize,
-                                                              fontWeight: FontWeight.bold,
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              restaurantItem.name ?? "Unknown Restaurant",
+                                                              style: TextStyle(
+                                                                fontSize: titleFontSize,
+                                                                fontWeight: FontWeight.bold,
+                                                              ),
+                                                              maxLines: 1,
+                                                              overflow: TextOverflow.ellipsis,
                                                             ),
-                                                            maxLines: 1,
-                                                            overflow: TextOverflow.ellipsis,
-                                                          ),
-                                                          buildCategory(restaurantId: restaurantId),
-                                                          Row(
-                                                            children: [
-                                                              Icon(Icons.star, color: Colors.amber, size: 14),
-                                                              Text(
-                                                                ' ${restaurantItem.rating.toStringAsFixed(1)} · ${restaurantItem.reviewCount} reviews',
-                                                                style: TextStyle(fontSize: 12),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
+                                                            buildCategory(restaurantId: restaurantId),
+                                                            Row(
+                                                              children: [
+                                                                Icon(Icons.star, color: Colors.amber, size: 14),
+                                                                Text(
+                                                                  ' ${restaurantItem.rating.toStringAsFixed(1)} · ${restaurantItem.reviewCount} reviews',
+                                                                  style: TextStyle(fontSize: 12),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    })
-                              ],
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      })
+                                ],
+                              ),
                             ),
-                          ),
                           FutureBuilder<List<Restaurant>>(
-                            future: restaurantController.fetchRestaurants(),
+                            future: selectedCategoryId != null ? RestaurantController().fetchRestaurantsByCategory(selectedCategoryId!) : restaurantController.fetchRestaurants(),
+
+                            // : restaurantController.fetchRestaurants(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState == ConnectionState.waiting) {
                                 return const Center(child: CircularProgressIndicator());
@@ -491,10 +513,12 @@ class _HomePageState extends State<HomePage> {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Other restaurants',
-                                    style: Theme.of(context).textTheme.headlineLarge,
-                                  ),
+                                  selectedCategoryId != null
+                                      ? SizedBox()
+                                      : Text(
+                                          'Other restaurants',
+                                          style: Theme.of(context).textTheme.headlineLarge,
+                                        ),
                                   const SizedBox(height: 12),
                                   GridView.builder(
                                     shrinkWrap: true,
@@ -658,20 +682,11 @@ class _HomePageState extends State<HomePage> {
     searchController.dispose();
     super.dispose();
   }
-}
 
-// void showMenuItemDetails(
-//   BuildContext context,
-// ) {
-//   showModalBottomSheet(
-//     context: context,
-//     isScrollControlled: true,
-//     shape: const RoundedRectangleBorder(
-//       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//     ),
-//     builder: (_) => MenuItemBottomSheet( menuItem: ,),
-//   );
-// }
+  Widget displayFilterCategory() {
+    return Scaffold();
+  }
+}
 
 Widget buildCategory({required restaurantId}) {
   return LayoutBuilder(builder: (context, constraints) {

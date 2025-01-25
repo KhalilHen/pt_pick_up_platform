@@ -15,11 +15,6 @@ class RestaurantController {
         print(response);
         final data = response;
         return data.map((e) => Restaurant.fromMap(e as Map<String, dynamic>)).toList();
-
-        // print(response);
-
-        // final data = response;
-        // return data.map((e) => Restaurant.fromMap(e as Map<String, dynamic>)).toList();
       }
     } catch (e) {
       print(e);
@@ -43,6 +38,35 @@ class RestaurantController {
     }
   }
 
+  Future<List<Restaurant>> retrieveAllRestaurants() async {
+    try {
+      final response = await supabase.from('restaurant').select();
+      if (response == null || response.isEmpty) {
+        return [];
+      } else {
+        final data = response;
 
+        return data.map((e) => Restaurant.fromMap(e as Map<String, dynamic>)).toList();
+      }
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
 
+  Future<List<Restaurant>> fetchRestaurantsByCategory(int categoryId) async {
+    try {
+      final response = await supabase.from("restaurant_category").select('restaurant(*)').eq('category_id', categoryId);
+
+      if (response == null || response.isEmpty) {
+        return [];
+      } else {
+        final restaurants = response.map((e) => Restaurant.fromMap(e['restaurant'] as Map<String, dynamic>)).toList();
+        return restaurants;
+      }
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
 }
