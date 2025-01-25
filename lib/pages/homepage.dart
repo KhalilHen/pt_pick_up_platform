@@ -574,17 +574,13 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.deepOrange,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
-        currentIndex: 0, // Set the current index
+        currentIndex: 0,
         onTap: (index) {
           if (index == 0) {
-            // Navigate to Home Page
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomePage()),
             );
-          } else if (index == 1) {
-            // Navigate to Orders Page
-            Navigator.of(context).pushReplacementNamed('/order-overview');
           } else if (index == 2) {
             Navigator.of(context).pushReplacementNamed('/account');
           }
@@ -595,12 +591,6 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account')
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     showMenuItemDetails(context);
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 

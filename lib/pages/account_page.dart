@@ -62,6 +62,28 @@ class AccountPage extends StatelessWidget {
             ),
           ),
         ),
+        bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: Colors.deepOrange,
+          unselectedItemColor: Colors.grey,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: 2,
+          onTap: (index) {
+            if (index == 0) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            } else if (index == 1) {
+              // Navigate to Orders Page
+              Navigator.of(context).pushReplacementNamed('/order-overview');
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account')
+          ],
+        ),
       );
     }
     return Scaffold(
@@ -145,6 +167,28 @@ class AccountPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.deepOrange,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: 2,
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          } else if (index == 1) {
+            // Navigate to Orders Page
+            Navigator.of(context).pushReplacementNamed('/order-overview');
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Orders'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account')
+        ],
       ),
     );
   }
