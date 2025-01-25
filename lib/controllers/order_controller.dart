@@ -169,25 +169,32 @@ class OrderController extends ChangeNotifier {
         restaurantId: currentRestaurantId!,
         totalAmount: totalAmount,
         status: OrderStatus.Pending,
+        items: cartItems.values
+            .map((item) => MenuItem(
+                  id: item.menuItemId,
+                  // name: item.,
+                  name: item.menuItem.name,
+                  description: item.menuItem.description,
+                  price: item.unitPrice.toInt(),
+                  sectionId: item.menuItem.sectionId,
+                ))
+            .toList(),
       );
       clearCart();
 
       print('Order created: $order');
 
-      // Navigator.pushNamed(context, OrderStatusScreen );
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => OrderInitialScreen(
             orderId: order.id,
-            // restaurantId: order.restaurantId,
           ),
         ),
       );
       return order;
     } catch (e) {
       throw Exception('Order creation failed');
-
     }
   }
 
@@ -215,13 +222,12 @@ class OrderController extends ChangeNotifier {
       throw Exception('User not found');
     }
 
-    final response = await supabase.from('order').select('*, restaurant:restaurant(id, name, image_url)').eq('user_id', getUser);
+    final response = await supabase.from('order').select('*, order_items(*, menu_items:menu_item_id(*)), restaurant:restaurant_id(*)').eq('user_id', getUser);
 
     if (response == null || response.isEmpty) {
       print('No orders found');
       return [];
     } else {
-      print('Order response: $response');
 
       return (response as List).map((data) => Order.fromMap(data as Map<String, dynamic>)).toList();
     }

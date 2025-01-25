@@ -19,6 +19,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+ 
   //To force user to use only portrait mode
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -73,15 +74,15 @@ class MyApp extends StatelessWidget {
       // home: const AuthGate(),
       // home: Introduction(),
       // home: Introduction(), //Easier for making the homepage
-      // home: AuthGate(),
-      home: SignUpPage(),
+      home: AuthGate(),
+      // home: SignUpPage(),
       // home: OrderStatusScreen(),
       // home: LoginPage(),
       routes: {
         Routes.onBoarding: (context) => Introduction(),
         Routes.authGate: (context) => AuthGate(),
         Routes.home: (context) => HomePage(),
-        // Routes.signUp: (context) => SignUp(),
+        Routes.signUp: (context) => SignUpPage(),
         Routes.login: (context) => LoginPage(),
       },
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),

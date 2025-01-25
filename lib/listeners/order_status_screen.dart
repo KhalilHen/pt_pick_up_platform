@@ -43,8 +43,8 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
 
             break;
 
-          case OrderStatus.ReadyForPickUp:
-            updateStatus(CustomerOrderStatus.ReadyForPickUp);
+          case OrderStatus.Ready:
+            updateStatus(CustomerOrderStatus.Ready);
             break;
 
           case OrderStatus.Completed:
@@ -229,7 +229,7 @@ class _OrderStatusScreenState extends State<OrderStatusScreen> with TickerProvid
       case CustomerOrderStatus.Preparing:
         return preparingAnimation();
 
-      case CustomerOrderStatus.ReadyForPickUp:
+      case CustomerOrderStatus.Ready:
         return readyAnimation();
 
       case CustomerOrderStatus.Completed:

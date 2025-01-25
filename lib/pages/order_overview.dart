@@ -2,8 +2,10 @@ import 'package:flutter/material.dart ';
 
 import 'package:provider/provider.dart  ';
 import 'package:pt_pick_up_platform/controllers/order_controller.dart';
+import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
 import 'package:pt_pick_up_platform/models/menu.dart';
 import 'package:pt_pick_up_platform/models/order.dart';
+import 'package:intl/intl.dart'; // Add this import
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -125,32 +127,37 @@ class _OrdersPageState extends State<OrdersPage> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: getStatusColor(order.status.name).withAlpha(25),
+              color: getStatusColor(order.status).withAlpha(25),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Icon(
-                      getStatusIcon(order.status.name),
-                      color: getStatusColor(order.status.name),
-                      size: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      getStatusText(order.status.name),
-                      style: TextStyle(
-                        color: getStatusColor(order.status.name),
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Row(
+                    children: [
+                      Icon(
+                        getStatusIcon(order.status),
+                        color: getStatusColor(order.status),
+                        size: 24,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          getStatusText(order.status),
+                          style: TextStyle(
+                            color: getStatusColor(order.status),
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          maxLines: 1,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Text(
-                  // order.createdAt,
-                  '12-5-2',
+                  order.orderTime != null ? DateFormat('dd-MM-yyyy').format(order.orderTime!) : 'Unknown date',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 12,
@@ -194,9 +201,11 @@ class _OrdersPageState extends State<OrdersPage> {
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            ' \$${order.totalAmount.toStringAsFixed(2)}',
+                            '${order.items.length} items • \$${order.totalAmount.toStringAsFixed(2)}',
                             style: TextStyle(
                               color: Colors.grey[600],
                             ),
@@ -244,54 +253,62 @@ class _OrdersPageState extends State<OrdersPage> {
     );
   }
 
-  Color getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'pending':
+  Color getStatusColor(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.Pending:
         return Colors.orange;
-      case 'kitchen':
+      case OrderStatus.Accepted:
+        return Colors.lightBlue;
+      case OrderStatus.Kitchen:
         return Colors.blue;
-      case 'ready_to_pick_up':
+      case OrderStatus.Ready:
         return Colors.green;
-      case 'completed':
+      case OrderStatus.Completed:
         return Colors.deepOrange;
-      case 'cancelled':
+      case OrderStatus.Cancelled:
         return Colors.red;
       default:
         return Colors.grey;
     }
   }
 
-  IconData getStatusIcon(String status) {
-    switch (status.toLowerCase()) {
-      case 'pending':
+  IconData getStatusIcon(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.Pending:
         return Icons.schedule;
-      case 'kitchen':
+      case OrderStatus.Accepted:
+        return Icons.assignment_turned_in_outlined;
+      case OrderStatus.Kitchen:
         return Icons.restaurant;
-      case 'ready_to_pick_up':
+      case OrderStatus.Ready:
         return Icons.check_circle;
-      case 'completed':
+      case OrderStatus.Completed:
         return Icons.done_all;
-      case 'cancelled':
+      case OrderStatus.Cancelled:
         return Icons.cancel;
       default:
         return Icons.receipt_long_outlined;
     }
   }
 
-  String getStatusText(String status) {
-    switch (status.toLowerCase()) {
-      case 'pending':
+  String getStatusText(OrderStatus status) {
+    switch (status) {
+      case OrderStatus.Pending:
         return 'Your order is pending';
-      case 'kitchen':
-        return 'Your oder is being prepared';
-      case 'ready_to_pick_up':
+      case OrderStatus.Accepted:
+        return 'Your order is accepted';
+      case OrderStatus.Rejected:
+        return 'Your order is rejected';
+      case OrderStatus.Kitchen:
+        return 'Your order is being prepared';
+      case OrderStatus.Ready:
         return 'Your order is ready for pick-up';
-      case 'completed':
-        return 'This order is Completed';
-      case 'cancelled':
+      case OrderStatus.Completed:
+        return 'This order is completed';
+      case OrderStatus.Cancelled:
         return 'Your order is cancelled';
       default:
-        return 'Unknown';
+        return 'Unknown status';
     }
   }
 }

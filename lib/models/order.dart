@@ -1,5 +1,7 @@
 import 'package:pt_pick_up_platform/models/enum/order_enum.dart';
+import 'package:pt_pick_up_platform/models/menu.dart';
 import 'package:pt_pick_up_platform/models/restaurant.dart';
+import 'package:intl/intl.dart';
 
 class Order {
   final int id;
@@ -9,6 +11,7 @@ class Order {
   final OrderStatus status;
   final Restaurant? restaurant;
   final DateTime? orderTime;
+  final List<MenuItem> items;
 
   Order({
     required this.id,
@@ -18,11 +21,12 @@ class Order {
     required this.status,
     this.restaurant,
     this.orderTime,
+    this.items = const [],
   });
 
   factory Order.fromMap(Map<String, dynamic> data) {
-    print('Debug - Full data: $data');
-    print('Debug - Restaurant data: ${data['restaurant']}');
+    // Parse items from order_items
+    List<MenuItem> items = (data['order_items'] as List?)?.map((itemData) => MenuItem.fromMap(itemData['menu_items'] ?? {})).toList() ?? [];
 
     return Order(
       id: _parseId(data['id']),
@@ -32,6 +36,7 @@ class Order {
       status: _parseStatus(data['status']),
       restaurant: data['restaurant'] != null ? Restaurant.fromMap(data['restaurant'] ?? {}) : null,
       orderTime: _parseDateTime(data['order_time']),
+      items: items,
     );
   }
 
@@ -47,11 +52,12 @@ class Order {
 
   static DateTime? _parseDateTime(dynamic value) {
     if (value == null) return null;
-    return value is DateTime ? value : DateTime.tryParse(value.toString());
+    DateTime? dateTime = value is DateTime ? value : DateTime.tryParse(value.toString());
+    return dateTime;
   }
 
   static OrderStatus _parseStatus(dynamic status) {
-    if (status == null) return OrderStatus.Pending;
+    if (status == null) return OrderStatus.Unknown;
 
     String statusString = status.toString().toLowerCase();
 
@@ -62,8 +68,8 @@ class Order {
         return OrderStatus.Accepted;
       case 'kitchen':
         return OrderStatus.Kitchen;
-      case 'ready_to_pick_up':
-        return OrderStatus.ReadyForPickUp;
+      case 'ready':
+        return OrderStatus.Ready;
       case 'completed':
         return OrderStatus.Completed;
       case 'cancelled':

@@ -89,7 +89,7 @@ class OrderTimeLine extends StatelessWidget {
       case CustomerOrderStatus.Preparing:
         return "Preparing your order";
 
-      case CustomerOrderStatus.ReadyForPickUp:
+      case CustomerOrderStatus.Ready:
         return "Your order is ready for pick-up";
 
       case CustomerOrderStatus.Completed:
@@ -108,7 +108,7 @@ class OrderTimeLine extends StatelessWidget {
       case CustomerOrderStatus.Preparing:
         return "Your order is being prepared";
 
-      case CustomerOrderStatus.ReadyForPickUp:
+      case CustomerOrderStatus.Ready:
         return "Your order is ready to be picked up";
 
       case CustomerOrderStatus.Completed:
