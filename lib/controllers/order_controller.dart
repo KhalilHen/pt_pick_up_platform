@@ -233,4 +233,12 @@ class OrderController extends ChangeNotifier {
       return (response as List).map((data) => Order.fromMap(data as Map<String, dynamic>)).toList();
     }
   }
+
+  void clearSpecificItem(int id) {
+    if (cartItems.containsKey(id)) {
+      cartItems.remove(id);
+      cartNotifier.value = hasItems;
+      notifyListeners();
+    }
+  }
 }

@@ -337,86 +337,121 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(
                                   height: 12,
                                 ),
-                                SizedBox(
-                                  height: itemHeight, // Limit the height to fit one row
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal, // Horizontal scroll
-                                    itemCount: 10,
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        width: itemWidth, // Set the width for each item
-                                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.deepOrange.withAlpha(25),
-                                          borderRadius: BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey.withAlpha(25),
-                                              spreadRadius: 1,
-                                              blurRadius: 10,
-                                            ),
-                                          ],
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              flex: 3,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey[300],
-                                                  borderRadius: const BorderRadius.vertical(
-                                                    top: Radius.circular(12),
+                                FutureBuilder<List<Restaurant>>(
+                                    future: restaurantController.retrievePopularRestaurants(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return const Text("There was an error");
+                                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                        return const Text('No data fond');
+                                      }
+
+                                      //         FutureBuilder<List<Restaurant>>(
+                                      // future: restaurantController.fetchRestaurants(),
+                                      // builder: (context, snapshot) {
+                                      //   if (snapshot.connectionState == ConnectionState.waiting) {
+                                      //     return const Center(child: CircularProgressIndicator());
+                                      //   } else if (snapshot.hasError) {
+                                      //     return const Text('There was an error');
+                                      //   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                      //     return const Text('No data found');
+                                      //   }
+
+                                      final List<Restaurant> popularRestaurants = snapshot.data!;
+
+                                      return SizedBox(
+                                        height: itemHeight, // Limit the height to fit one row
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: popularRestaurants.length,
+                                          itemBuilder: (context, index) {
+                                            final restaurantItem = popularRestaurants[index];
+                                            final restaurantId = restaurantItem.id;
+                                            return Container(
+                                              width: itemWidth, // Set the width for each item
+                                              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                                              decoration: BoxDecoration(
+                                                color: Colors.deepOrange.withAlpha(25),
+                                                borderRadius: BorderRadius.circular(12),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey.withAlpha(25),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 10,
                                                   ),
-                                                ),
-                                                child: const Center(
-                                                  child: Icon(Icons.image, size: 40, color: Colors.grey),
-                                                ),
+                                                ],
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Popular Item ${index + 1}',
-                                                      style: TextStyle(
-                                                        fontSize: titleFontSize,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                    ),
-                                                    Text(
-                                                      'Labels/Tags',
-                                                      style: TextStyle(
-                                                        fontSize: subtitleFontSize, // Dynamic font size for subtitle
-                                                        color: Colors.grey[600],
-                                                      ),
-                                                    ),
-                                                    Row(
-                                                      children: const [
-                                                        Icon(Icons.star, color: Colors.amber, size: 14),
-                                                        Text(
-                                                          ' 4.5 · 20min',
-                                                          style: TextStyle(fontSize: 12),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 3,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey[300],
+                                                        borderRadius: const BorderRadius.vertical(
+                                                          top: Radius.circular(12),
                                                         ),
-                                                      ],
+                                                      ),
+                                                      child: Center(
+                                                        child: restaurantItem.imgUrl == null || restaurantItem.imgUrl!.isEmpty
+                                                            ? const Icon(
+                                                                Icons.image,
+                                                                size: 40,
+                                                                color: Colors.grey,
+                                                              )
+                                                            : Image.network(
+                                                                restaurantItem.imgUrl!,
+                                                                fit: BoxFit.cover,
+                                                                width: double.infinity,
+                                                                height: double.infinity,
+                                                              ),
+                                                        //  Icon(Icons.image, size: 40, color: Colors.grey),
+                                                      ),
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            restaurantItem.name ?? "Unknown Restaurant",
+                                                            style: TextStyle(
+                                                              fontSize: titleFontSize,
+                                                              fontWeight: FontWeight.bold,
+                                                            ),
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                          buildCategory(restaurantId: restaurantId),
+                                                          Row(
+                                                            children: [
+                                                              Icon(Icons.star, color: Colors.amber, size: 14),
+                                                              Text(
+                                                                ' ${restaurantItem.rating.toStringAsFixed(1)} · ${restaurantItem.reviewCount} reviews',
+                                                                style: TextStyle(fontSize: 12),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ],
+                                            );
+                                          },
                                         ),
                                       );
-                                    },
-                                  ),
-                                )
+                                    })
                               ],
                             ),
                           ),
@@ -576,11 +611,14 @@ class _HomePageState extends State<HomePage> {
         type: BottomNavigationBarType.fixed,
         currentIndex: 0,
         onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
-            );
+          // if (index == 0) {
+          //   Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => const HomePage()),
+          //   );
+          // }
+          if (index == 1) {
+            Navigator.of(context).pushReplacementNamed('/order-overview');
           } else if (index == 2) {
             Navigator.of(context).pushReplacementNamed('/account');
           }

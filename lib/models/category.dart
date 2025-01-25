@@ -27,19 +27,24 @@ class Category {
     switch (iconName) {
       case 'fastfood':
         return Icons.fastfood;
-      case 'local_pizza':
+      case 'pizza':
         return Icons.local_pizza;
       case 'restaurant':
         return Icons.restaurant;
 
-        case 'vegan':
+      case 'vegan':
         return Icons.coffee;
-      // Add more cases as needed
+      case 'fish':
+        return Icons.set_meal_outlined;
+      // case 'burgers':
+      case 'icecream':
+        return Icons.icecream;
+
+      // return Icons.food
       default:
         return Icons.help_outline; // Default icon if no match is found
     }
   }
-
 
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
@@ -48,7 +53,4 @@ class Category {
       iconName: map['icon_name'],
     );
   }
-
-
-
 }
