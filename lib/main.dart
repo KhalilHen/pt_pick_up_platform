@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:pt_pick_up_platform/auth/auth_gate.dart';
+import 'package:pt_pick_up_platform/auth/auth_provider.dart';
 import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/onboarding/pages/introduction.dart';
 import 'package:pt_pick_up_platform/onboarding/start_page.dart';
@@ -19,19 +20,24 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
- 
+
   //To force user to use only portrait mode
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => OrderController(),
-      child: MyApp(),
-    ),
-  );
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<OrderController>(
+        create: (_) => OrderController(),
+      ),
+      ChangeNotifierProvider<AuthProvider>(
+        create: (_) => AuthProvider(),
+      ),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 final supabase = Supabase.instance.client;

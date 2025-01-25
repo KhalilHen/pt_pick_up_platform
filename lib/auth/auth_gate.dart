@@ -39,6 +39,14 @@ class _AuthGateState extends State<AuthGate> {
     super.initState();
     isFirstTimeUserValue = isFirstTimeUser();
     isSecondTimeUserValue = isSecondTimeUser();
+
+    Supabase.instance.client.auth.onAuthStateChange.listen((event) {
+      if (event.session == null) {
+        Navigator.pushNamedAndRemoveUntil(context, Routes.login, (route) => false);
+      } else {
+        Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
+      }
+    });
   }
 
   @override

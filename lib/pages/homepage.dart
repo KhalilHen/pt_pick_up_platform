@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pt_pick_up_platform/auth/auth_provider.dart';
 import 'package:pt_pick_up_platform/controllers/category_controller.dart';
 import 'package:pt_pick_up_platform/controllers/order_controller.dart';
 import 'package:pt_pick_up_platform/controllers/restaurant_controller.dart';
@@ -22,6 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //For searching
+
   final TextEditingController searchController = TextEditingController();
   List<Restaurant> filteredRestaurants = [];
   bool isSearching = false;
@@ -64,6 +67,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
+// final authProvider = Provider.of<AuthProvider>(context);
+
+    final authProvider = Provider.of<AuthProvider>(context);
+
     final categoryController = CategoryController();
     final restaurantController = RestaurantController();
     final screenSize = MediaQuery.of(context).size;
@@ -85,8 +92,17 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.person_outline),
-            onPressed: () {},
+            icon: Icon(authProvider.isLoggedIn ? Icons.logout : Icons.login),
+            // icon: Icon(Icons.logout),
+
+            onPressed: () {
+              if (authProvider.isLoggedIn) {
+                authProvider.logOut();
+              } else {
+                Navigator.pushNamed(context, '/login');
+              }
+            },
+            tooltip: authProvider.isLoggedIn ? 'Log out' : 'Log in',
           ),
         ],
       ),

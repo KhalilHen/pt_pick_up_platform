@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pt_pick_up_platform/auth/auth_provider.dart';
 import 'package:pt_pick_up_platform/pages/homepage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../main.dart';
@@ -8,16 +9,22 @@ class AuthService {
     return await supabase.auth.signInWithPassword(email: email, password: password);
   }
 
-  Future<void> checkUser(String email, String password, GlobalKey<FormState> formKey) async {
+  Future<void> checkUser(String email, String password, GlobalKey<FormState> formKey, AuthProvider authProvider, BuildContext context) async {
     if (formKey.currentState!.validate()) {
       try {
-        await signInWithEmailAndPassword(email: email, password: password).then((value) {
-          Navigator.of(formKey.currentContext!).pushReplacement(
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );
-        }).catchError((e) {
-          ScaffoldMessenger.of(formKey.currentContext!).showSnackBar(SnackBar(content: Text('Error: $e')));
-        });
+           await authProvider.login(email, password);
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+        // await signInWithEmailAndPassword(email: email, password: password).then((value) {
+        //     Navigator.of(formKey.currentContext!).pushReplacement(
+        //       MaterialPageRoute(builder: (context) => HomePage()),
+        //     );
+        //   }).catchError((e) {
+        //     ScaffoldMessenger.of(formKey.currentContext!).showSnackBar(SnackBar(content: Text('Error: $e')));
+        //   });
+        // } catch (e) {
+        //   ScaffoldMessenger.of(formKey.currentContext!).showSnackBar(SnackBar(content: Text('Error: $e')));
       } catch (e) {
         ScaffoldMessenger.of(formKey.currentContext!).showSnackBar(SnackBar(content: Text('Error: $e')));
       }

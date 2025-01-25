@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pt_pick_up_platform/auth/auth_provider.dart';
 import 'package:pt_pick_up_platform/auth/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -134,7 +138,12 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState?.validate() ?? false) {
-                          authService.checkUser(emailController.text, passwordController.text, formKey);
+                          // authService.checkUser(emailController.text, passwordController.text, formKey, authProvider);
+                          // authProvider.logOut();
+                          // authProvider.login(emailController.text, passwordController.text, formKey);
+
+    authService.checkUser(emailController.text, passwordController.text, formKey, authProvider, context);
+
                         }
                       },
                       style: ElevatedButton.styleFrom(

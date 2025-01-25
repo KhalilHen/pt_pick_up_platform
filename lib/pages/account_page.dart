@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pt_pick_up_platform/auth/auth_provider.dart';
 import 'package:pt_pick_up_platform/pages/homepage.dart';
 import 'package:pt_pick_up_platform/pages/order_overview.dart';
 
 class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // final authProvider = Provider.of<AuthProvider>;
+    // final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
